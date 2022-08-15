@@ -140,32 +140,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h" />
-    <ClInclude Include="Entity.h" />
-    <ClInclude Include="Color.h" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="NewPhysicsEngine.h" />
-    <ClInclude Include="Resource.h" />
-    <ClInclude Include="targetver.h" />
-    <ClInclude Include="Vector2.h" />
+    <ClInclude Include="Misc\framework.h" />
+    <ClInclude Include="Misc\NewPhysicsEngine.h" />
+    <ClInclude Include="Misc\Resource.h" />
+    <ClInclude Include="Misc\targetver.h" />
+    <ClInclude Include="Physics\Entity.h" />
+    <ClInclude Include="Physics\Scene.h" />
+    <ClInclude Include="Renderer\Mesh.h" />
+    <ClInclude Include="Renderer\Renderer.h" />
+    <ClInclude Include="Renderer\Shader.h" />
+    <ClInclude Include="Structs\Color.h" />
+    <ClInclude Include="Structs\Vector2.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\WindowsProject1\WindowsProject1\glad.c" />
-    <ClCompile Include="Mesh.h" />
     <ClCompile Include="NewPhysicsEngine.cpp" />
-    <ClCompile Include="Shader.h" />
-    <ClCompile Include="Renderer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="NewPhysicsEngine.rc" />
+    <ResourceCompile Include="Misc\NewPhysicsEngine.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="NewPhysicsEngine.ico" />
-    <Image Include="small.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Circle.vert" />
-    <Text Include="Circle.frag" />
+    <None Include="Shaders\Circle.frag" />
+    <None Include="Shaders\Circle.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

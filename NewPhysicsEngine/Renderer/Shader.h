@@ -13,7 +13,7 @@ using namespace std;
 class Shader
 {
 private: 
-	string parentPath = "";
+	string parentPath = "Shaders/";
 
 public:
 

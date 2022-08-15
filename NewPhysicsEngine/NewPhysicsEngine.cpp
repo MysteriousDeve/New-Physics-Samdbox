@@ -4,12 +4,12 @@
 #include <string>
 #include <math.h>
 
-#include "Renderer.h"
-#include "Scene.h"
+#include "Renderer/Renderer.h"
+#include "Physics/Scene.h"
 
 using namespace std;
 
-int w = 1600, h = 800;
+int w = 1400, h = 800;
 
 //---Function forward declaration---///////////////////////
 void ErrorCallback(int errorCode, const char* description);

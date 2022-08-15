@@ -9,12 +9,13 @@
 
 using namespace std;
 
-int w = 600, h = 600;
+int w = 1600, h = 800;
 
 //---Function forward declaration---///////////////////////
 void ErrorCallback(int errorCode, const char* description);
 void ResizeCallback(GLFWwindow* window, int w, int h);
 void InitializeWindow(GLFWwindow* window);
+void AlignViewport(int w, int h);
 ///////////////////////////////////////////////////////////
 
 
@@ -33,7 +34,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     InitializeWindow(win);
     
     gladLoadGL();
-    glViewport(0, 0, w, h);
+    AlignViewport(w, h);
 
 
     GLfloat vert[]{
@@ -88,6 +89,11 @@ void ErrorCallback(int errorCode, const char* description)
 }
 
 void ResizeCallback(GLFWwindow* window, int w, int h)
+{
+    AlignViewport(w, h);
+}
+
+void AlignViewport(int w, int h)
 {
     glViewport((w - h) / 2, 0, h, h);
 }

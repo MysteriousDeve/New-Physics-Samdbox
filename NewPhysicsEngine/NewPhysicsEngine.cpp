@@ -17,6 +17,7 @@ void ResizeCallback(GLFWwindow* window, int w, int h);
 void InitializeWindow(GLFWwindow* window);
 ///////////////////////////////////////////////////////////
 
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     glfwSetErrorCallback(ErrorCallback);
@@ -57,7 +58,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     {
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-        renderer.Render(scene.entities.size(), [&scene](int i, Shader* shader) { scene.RenderScene(i, shader); });
+        renderer.Render(
+            scene.entities.size(), 
+            [&scene](int i, Shader* shader) 
+            { 
+                scene.RenderScene(i, shader); 
+            }
+        );
 
         glfwSwapBuffers(win);
         glfwPollEvents();

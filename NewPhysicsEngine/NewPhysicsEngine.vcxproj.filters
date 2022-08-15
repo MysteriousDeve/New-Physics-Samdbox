@@ -27,29 +27,38 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h">
+    <ClInclude Include="Misc\framework.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="targetver.h">
+    <ClInclude Include="Misc\NewPhysicsEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Resource.h">
+    <ClInclude Include="Misc\Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NewPhysicsEngine.h">
+    <ClInclude Include="Misc\targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Source Files\Physics</Filter>
+    <ClInclude Include="Physics\Entity.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Entity.h">
-      <Filter>Source Files\Physics</Filter>
+    <ClInclude Include="Physics\Scene.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Vector2.h">
-      <Filter>Source Files\Structs</Filter>
+    <ClInclude Include="Renderer\Mesh.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Color.h">
-      <Filter>Source Files\Structs</Filter>
+    <ClInclude Include="Renderer\Renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Structs\Color.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Structs\Vector2.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -59,35 +68,14 @@
     <ClCompile Include="..\..\WindowsProject1\WindowsProject1\glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Mesh.h">
-      <Filter>Source Files\Classes</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader.h">
-      <Filter>Source Files\Classes</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer.h">
-      <Filter>Source Files\Classes</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="NewPhysicsEngine.rc">
+    <ResourceCompile Include="Misc\NewPhysicsEngine.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="small.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="NewPhysicsEngine.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Circle.vert">
-      <Filter>Source Files\Shaders</Filter>
-    </Text>
-    <Text Include="Circle.frag">
-      <Filter>Source Files\Shaders</Filter>
-    </Text>
+    <None Include="Shaders\Circle.vert" />
+    <None Include="Shaders\Circle.frag" />
   </ItemGroup>
 </Project>

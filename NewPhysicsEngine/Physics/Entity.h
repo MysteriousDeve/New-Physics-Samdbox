@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Vector2.h"
-#include "Color.h"
+#include "../Structs/Vector2.h"
+#include "../Structs/Color.h"
 
 enum class EntityType
 {

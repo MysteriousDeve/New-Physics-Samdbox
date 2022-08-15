@@ -4,7 +4,7 @@
 
 #include "Mesh.h"
 #include "Shader.h"
-#include "Scene.h"
+#include "../Physics/Scene.h"
 
 class Renderer
 {

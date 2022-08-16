@@ -46,24 +46,22 @@ public:
 
 	void NarrowCollisionsTest()
 	{
-		set<int> entityIndex;
-
 		int size = entities.size();
+
+		for (int i = 0; i < size; i++)
+		{
+			entities[i].color = Color(0, 0.5, 1);
+		}
 		for (int i = 0; i < size; i++)
 		{
 			for (int j = i + 1; j < size; j++)
 			{
 				if (entities[i].boundingBox.DetectCollisionTest(entities[j].boundingBox))
 				{
-					entityIndex.insert(i);
-					entityIndex.insert(j);
+					entities[i].color = Color(0, 1, 0);
+					entities[j].color = Color(0, 1, 0);
 				}
 			}
-		}
-
-		for (int i = 0; i < entityIndex.size(); i++)
-		{
-			entities[i].color = Color(0, 1, 0);
 		}
 	}
 

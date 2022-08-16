@@ -60,6 +60,15 @@
     <ClInclude Include="Structs\Vector2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Physics\Transform2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\AABB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="NewPhysicsEngine.cpp">
@@ -77,5 +86,8 @@
   <ItemGroup>
     <None Include="Shaders\Circle.vert" />
     <None Include="Shaders\Circle.frag" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Shaders\Something.frag" />
   </ItemGroup>
 </Project>

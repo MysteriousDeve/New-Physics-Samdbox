@@ -5,6 +5,7 @@
 #include <math.h>
 
 #include "Renderer/Renderer.h"
+#include "Renderer/Camera.h"
 #include "Physics/Scene.h"
 
 using namespace std;
@@ -18,6 +19,7 @@ void InitializeWindow(GLFWwindow* window);
 void AlignViewport(int w, int h);
 ///////////////////////////////////////////////////////////
 
+Camera cam(Vector2(0.0f, 0.0f), 0.5, 0, w / float(h));
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
@@ -34,35 +36,40 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     InitializeWindow(win);
     
     gladLoadGL();
-    AlignViewport(w, h);
+    glViewport(0, 0, w, h);
 
 
     GLfloat vert[]{
-        -0.5f, -0.5f, 0.0f,
-        -0.5f,  0.5f, 0.0f,
-         0.5f,  0.5f, 0.0f,
-         0.5f, -0.5f, 0.0f,
+        -1.0f, -1.0f, 0.0f,
+        -1.0f,  1.0f, 0.0f,
+         1.0f,  1.0f, 0.0f,
+         1.0f, -1.0f, 0.0f,
     };
     GLuint index[]{
         0, 1, 2, 2, 3, 0
     };
     Renderer renderer(
         MeshInfo(vert, sizeof(vert), index, sizeof(index)),
-        "Circle"
+        "Circle", "Something"
     );
     renderer.Initialize();
     
     Scene scene;
-    scene.InitializeSceneTesting(48);
+    scene.InitializeSceneTesting(30);
+    scene.NarrowCollisionsTest();
+
+    
 
     while (!glfwWindowShouldClose(win))
     {
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        renderer.SetCameraMatrix(cam.GetCameraMatrix());
         renderer.Render(
             scene.entities.size(), 
             [&scene](int i, Shader* shader) 
-            { 
+            {
                 scene.RenderScene(i, shader); 
             }
         );
@@ -90,10 +97,6 @@ void ErrorCallback(int errorCode, const char* description)
 
 void ResizeCallback(GLFWwindow* window, int w, int h)
 {
-    AlignViewport(w, h);
-}
-
-void AlignViewport(int w, int h)
-{
-    glViewport((w - h) / 2, 0, h, h);
+    glViewport(0, 0, w, h);
+    cam.SetWHratio(w / float(h));
 }

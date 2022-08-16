@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 #include <string>
 #include <math.h>
+#include <glm/glm.hpp>
 
 #include "Renderer/Renderer.h"
 #include "Renderer/Camera.h"
@@ -10,16 +11,15 @@
 
 using namespace std;
 
-int w = 1400, h = 800;
 
-//---Function forward declaration---///////////////////////
+int w = 1400, h = 800;
 void ErrorCallback(int errorCode, const char* description);
 void ResizeCallback(GLFWwindow* window, int w, int h);
 void InitializeWindow(GLFWwindow* window);
-void AlignViewport(int w, int h);
-///////////////////////////////////////////////////////////
+void Panning(GLFWwindow* window);
 
-Camera cam(Vector2(0.0f, 0.0f), 0.5, 0, w / float(h));
+
+Camera cam(Vector2(-1.0f, 0.0f), 0.5, 0, w / float(h));
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
@@ -56,16 +56,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     
     Scene scene;
     scene.InitializeSceneTesting(30);
-    scene.NarrowCollisionsTest();
-
     
+
 
     while (!glfwWindowShouldClose(win))
     {
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        renderer.SetCameraMatrix(cam.GetCameraMatrix());
+        scene.NarrowCollisionsTest();
+
+        Panning(win);
+        renderer.SetCameraTransformation(cam.GetCameraMatrix(), cam.GetPosition());
         renderer.Render(
             scene.entities.size(), 
             [&scene](int i, Shader* shader) 
@@ -73,7 +75,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 scene.RenderScene(i, shader); 
             }
         );
-
         glfwSwapBuffers(win);
         glfwPollEvents();
     }
@@ -99,4 +100,24 @@ void ResizeCallback(GLFWwindow* window, int w, int h)
 {
     glViewport(0, 0, w, h);
     cam.SetWHratio(w / float(h));
+}
+
+void Panning(GLFWwindow* window)
+{
+    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+    {
+        cam.Translate(Vector2(-1 / 60.0, 0));
+    }
+    else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+    {
+        cam.Translate(Vector2(1 / 60.0, 0));
+    }
+    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+    {
+        cam.Translate(Vector2(0, 1 / 60.0));
+    }
+    else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+    {
+        cam.Translate(Vector2(0, -1 / 60.0));
+    }
 }

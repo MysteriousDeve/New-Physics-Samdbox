@@ -50,8 +50,9 @@ public:
 		shader->DestroyShaderProgram();
 	}
 
-	void SetCameraMatrix(glm::mat4x4 mat)
+	void SetCameraTransformation(glm::mat4x4 mat, glm::vec2 pan)
 	{
 		shader->SetUniformMat4x4("CameraMatrix", mat);
+		shader->SetUniformVec2("Pan", pan[0], pan[1]);
 	}
 };

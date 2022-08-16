@@ -8,6 +8,7 @@
 #include <sstream>
 #include <cerrno>
 #include <Windows.h>
+#include <glm/glm.hpp>
 using namespace std;
 
 class Shader
@@ -18,15 +19,17 @@ private:
 public:
 
 	GLuint ID;
-	string shaderName;
+	string vert, frag;
 
-	Shader(string shaderName)
+	Shader(string vert, string frag)
 	{
-		this->shaderName = shaderName;
+		this->vert = vert;
+		this->frag = frag;
+
 	}
 	void Initialize()
 	{
-		string v = getFileContent(parentPath + shaderName + ".vert");
+		string v = getFileContent(parentPath + vert + ".vert");
 		const char* vertexShaderText = v.c_str();
 
 		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -35,7 +38,7 @@ public:
 		compileErrors(vertexShader, "VERTEX");
 
 
-		string f = getFileContent(parentPath + shaderName + ".frag");
+		string f = getFileContent(parentPath + frag + ".frag");
 		const char* fragmentShaderText = f.c_str();
 
 		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -74,8 +77,10 @@ public:
 	{
 		glUniform1f(glGetUniformLocation(ID, name), x);
 	}
-
-
+	void SetUniformMat4x4(const GLchar* name, glm::mat4x4 mat)
+	{
+		glUniformMatrix4fv(glGetUniformLocation(ID, name), 1, GL_FALSE, &mat[0][0]);
+	}
 
 private:
 	string getFileContent(string filename)

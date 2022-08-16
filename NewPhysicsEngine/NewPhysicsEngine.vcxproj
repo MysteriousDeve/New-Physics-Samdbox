@@ -145,7 +145,10 @@
     <ClInclude Include="Misc\Resource.h" />
     <ClInclude Include="Misc\targetver.h" />
     <ClInclude Include="Physics\Entity.h" />
+    <ClInclude Include="Physics\AABB.h" />
+    <ClInclude Include="Physics\Transform2D.h" />
     <ClInclude Include="Physics\Scene.h" />
+    <ClInclude Include="Renderer\Camera.h" />
     <ClInclude Include="Renderer\Mesh.h" />
     <ClInclude Include="Renderer\Renderer.h" />
     <ClInclude Include="Renderer\Shader.h" />
@@ -162,6 +165,9 @@
   <ItemGroup>
     <None Include="Shaders\Circle.frag" />
     <None Include="Shaders\Circle.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Shaders\Something.frag" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

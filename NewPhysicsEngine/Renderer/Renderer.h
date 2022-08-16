@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <glm/glm.hpp>
 
 #include "Mesh.h"
 #include "Shader.h"
@@ -13,10 +14,10 @@ private:
 	Shader* shader = nullptr;
 
 public:
-	Renderer(MeshInfo meshInfo, string shaderName)
+	Renderer(MeshInfo meshInfo, string vert, string frag)
 	{
 		mesh = new Mesh(meshInfo);
-		shader = new Shader(shaderName);
+		shader = new Shader(vert, frag);
 	}
 	
 	void Initialize()
@@ -47,5 +48,10 @@ public:
 	{
 		mesh->Terminate();
 		shader->DestroyShaderProgram();
+	}
+
+	void SetCameraMatrix(glm::mat4x4 mat)
+	{
+		shader->SetUniformMat4x4("CameraMatrix", mat);
 	}
 };

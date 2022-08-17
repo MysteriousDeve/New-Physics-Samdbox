@@ -8,8 +8,12 @@
 #include "Renderer/Renderer.h"
 #include "Renderer/Camera.h"
 #include "Physics/Scene.h"
+#include "Physics/Entity.h"
+#include "Physics/Transform2D.h"
+#include "UI/InteractionHandler.h"
 
 using namespace std;
+using namespace glm;
 
 
 int w = 1400, h = 800;
@@ -19,7 +23,7 @@ void InitializeWindow(GLFWwindow* window);
 void Panning(GLFWwindow* window);
 
 
-Camera cam(Vector2(-1.0f, 0.0f), 0.5, 0, w / float(h));
+Camera cam(Vector2(0.0f, 0.0f), 1, 0, w / float(h));
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
@@ -40,31 +44,36 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 
     GLfloat vert[]{
-        -1.0f, -1.0f, 0.0f,
+        /*-1.0f, -1.0f, 0.0f,
         -1.0f,  1.0f, 0.0f,
          1.0f,  1.0f, 0.0f,
-         1.0f, -1.0f, 0.0f,
+         1.0f, -1.0f, 0.0f,*/
+         -0.5f, -0.5f, 0.0f,
+         -0.5f,  0.5f, 0.0f,
+          0.5f,  0.5f, 0.0f,
+          0.5f, -0.5f, 0.0f
     };
     GLuint index[]{
         0, 1, 2, 2, 3, 0
     };
     Renderer renderer(
         MeshInfo(vert, sizeof(vert), index, sizeof(index)),
-        "Circle", "Something"
+        "Common", "Circle"
     );
     renderer.Initialize();
     
     Scene scene;
     scene.InitializeSceneTesting(30);
-    
+    scene.NarrowCollisionsTest();
 
+    InteractionHandler handler(win, &cam);
 
     while (!glfwWindowShouldClose(win))
     {
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        scene.NarrowCollisionsTest();
+        
 
         Panning(win);
         renderer.SetCameraTransformation(cam.GetCameraMatrix(), cam.GetPosition());
@@ -75,6 +84,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 scene.RenderScene(i, shader); 
             }
         );
+
+        Vector2 mPos = handler.GetMouseWorldPos();
+        renderer.Render(
+            1,
+            [&mPos](int i, Shader* shader)
+            {
+                shader->SetUniformVec4("Color", 1, 1, 1, 0);
+                shader->SetUniformVec2("Position", mPos.x, mPos.y);
+                shader->SetUniformVec2("Size", 0.1, 0.1);
+            }
+        );
+
         glfwSwapBuffers(win);
         glfwPollEvents();
     }

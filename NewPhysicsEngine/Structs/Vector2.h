@@ -1,6 +1,7 @@
 #pragma once
 
 #include <math.h>
+#include <glm/glm.hpp>
 using namespace std;
 
 struct Vector2
@@ -70,7 +71,7 @@ struct Vector2
 	// The length of the vector
 	float len()
 	{
-		return sqrt(x * x + y * y);
+		return sqrt(pow(x, 2) + pow(x, 2));
 	}
 
 	float lenSq()
@@ -112,5 +113,14 @@ struct Vector2
 		float c = cos(angle);
 		float s = sin(angle);
 		return (*this = Vector2(c * x - s * y, s * x + c * y));
+	}
+
+	//--------------------------------------------------
+	// Casts -------------------------------------------
+	//--------------------------------------------------
+
+	operator glm::vec2() const
+	{
+		return glm::vec2(x, y);
 	}
 };

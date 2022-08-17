@@ -33,6 +33,10 @@ public:
 	{
 		this->WHratio = WHratio;
 	}
+	float GetWHratio()
+	{
+		return WHratio;
+	}
 
 	void SetRotation(float rotation)
 	{

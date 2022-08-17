@@ -69,6 +69,9 @@
     <ClInclude Include="Renderer\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="UI\InteractionHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="NewPhysicsEngine.cpp">
@@ -84,7 +87,7 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\Circle.vert" />
+    <None Include="Shaders\Common.vert" />
     <None Include="Shaders\Circle.frag" />
   </ItemGroup>
   <ItemGroup>

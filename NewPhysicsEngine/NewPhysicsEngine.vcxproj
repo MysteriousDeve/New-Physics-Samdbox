@@ -154,6 +154,7 @@
     <ClInclude Include="Renderer\Shader.h" />
     <ClInclude Include="Structs\Color.h" />
     <ClInclude Include="Structs\Vector2.h" />
+    <ClInclude Include="UI\InteractionHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\WindowsProject1\WindowsProject1\glad.c" />
@@ -164,7 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\Circle.frag" />
-    <None Include="Shaders\Circle.vert" />
+    <None Include="Shaders\Common.vert" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Shaders\Something.frag" />

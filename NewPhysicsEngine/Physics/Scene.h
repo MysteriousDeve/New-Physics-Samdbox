@@ -1,10 +1,14 @@
 #pragma once
 
+#include <iostream>
 #include <math.h>
 #include <vector>
 #include <set>
 #include <sstream>
+#include <string>
 #include "Entity.h"
+#include "Geometry.h"
+
 
 using namespace std;
 
@@ -21,7 +25,7 @@ private:
 		}
 	};
 public:
-	vector<Entity> entities;
+	vector<Geometry> geometries;
 	Scene()
 	{
 		
@@ -31,29 +35,39 @@ public:
 	{
 		for (int i = 0; i < nOfTestEntities; i++)
 		{
-			rand(); rand();
-			Entity e(
+			float randRadius = (rand()) / float(RAND_MAX) / 10.0 + 0.025;
+
+			Geometry g(
 				Transform2D(
-					Vector2(rand() / float(RAND_MAX) - 0.5f, rand() / float(RAND_MAX) - 0.5f),
+					Vector2((rand()) / float(RAND_MAX) / 2.0 - 0.25f, (rand()) / float(RAND_MAX) / 2.0 - 0.25f),
 					0,
-					Vector2(0.05f, 0.05f),
+					Vector2(randRadius, randRadius),
 					0
 				),
 				EntityType::Circle
 			);
-			e.color = Color(0, 0.5, 1);
-			entities.push_back(e);
+			g.color = Color(0, 0.5, 1);
+			g.vel = Vector2(
+				(rand()) / float(RAND_MAX) / 2.0 - 0.25f, 
+				(rand()) / float(RAND_MAX) / 2.0 - 0.25f
+			);
+			geometries.push_back(g);
 		}
 	}
 
-	void AddEntity(Entity e)
+	void AddGeometry(Geometry g)
 	{
-		entities.push_back(e);
+		geometries.push_back(g);
+	}
+
+	Geometry* GetGeometryRef(int i)
+	{
+		return &geometries[i];
 	}
 
 	void RenderScene(int i, Shader* shader)
 	{
-		Entity e = entities[i];
+		Geometry e = geometries[i];
 		shader->SetUniformVec4("Color", e.color.r, e.color.g, e.color.b, e.color.a);
 		shader->SetUniformVec2("Position", e.transform.position.x, e.transform.position.y);
 		shader->SetUniformVec2("Size", e.transform.scale.x, e.transform.scale.y);
@@ -61,46 +75,68 @@ public:
 
 	void NarrowCollisionsTest()
 	{
-		int size = entities.size();
+		int size = geometries.size();
 		vector<CollisionTestInfo> testList;
 
 		for (int i = 0; i < size; i++)
 		{
-			entities[i].color = Color(0, 0.5, 1);
+			geometries[i].color = Color(0, 0.5, 1);
+			geometries[i].CalculateAABB();
 		}
 		for (int i = 0; i < size; i++)
 		{
 			for (int j = i + 1; j < size; j++)
 			{
-				if (entities[i].boundingBox.DetectCollisionTest(entities[j].boundingBox))
+				bool cond = AABB::DetectCollisionTest(geometries[i].boundingBox, geometries[j].boundingBox);
+				if (cond)
 				{
 					testList.push_back(CollisionTestInfo(i, j));
-					entities[i].color = Color(0, 1, 1);
-					entities[j].color = Color(0, 1, 1);
+					geometries[i].color = Color(0, 1, 1);
+					geometries[j].color = Color(0, 1, 1);
 				}
 			}
 		}
 		for (auto &t: testList)
 		{
-			float r = rand() / float(RAND_MAX);
-			float r2 = rand() / float(RAND_MAX);
-			
-			Entity* a = &entities[t.a];
-			Entity* b = &entities[t.b];
+			Entity* a = &geometries[t.a];
+			Entity* b = &geometries[t.b];
 			if 
 			(
-				pow((a->transform.scale.x + b->transform.scale.x) / 2.0f, 2) <
+				pow((a->transform.scale.x + b->transform.scale.x) / 2.0f, 2) >
 				(a->transform.position - b->transform.position).lenSq()
 			)
 			{
-				a->color = Color(r, r2, 0);
-				b->color = Color(r, r2, 0);
+				a->color = Color(0, 1, 0.5);
+				b->color = Color(0, 1, 0.5);
 			}
 		}
 	}
 
 	void Update(float delta)
 	{
+		NarrowCollisionsTest();
+		for (auto& t : geometries)
+		{
+			t.transform.position += t.vel * delta;
+			Vector2 pos = t.transform.position;
 
+			if (pos.x > 1)
+			{
+				t.transform.position.x -= 2;
+			}
+			else if (pos.x < -1)
+			{
+				t.transform.position.x += 2;
+			}
+
+			if (pos.y > 1)
+			{
+				t.transform.position.y -= 2;
+			}
+			else if (pos.y < -1)
+			{
+				t.transform.position.y += 2;
+			}
+		}
 	}
 };

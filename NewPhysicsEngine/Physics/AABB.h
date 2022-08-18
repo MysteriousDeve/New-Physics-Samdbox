@@ -5,28 +5,27 @@
 // Struct for Axis-Aligned Bounding Box
 struct AABB
 {
-	float x = 0, y = 0, 
-		  w = 0, h = 0;
+	float w = 0, h = 0;
+	Vector2 pos;
 
 	AABB()
 	{
 
 	}
 
-	AABB(Vector2 position, float radius)
+	AABB(Vector2 position, float squareSize)
 	{
-		x = position.x;
-		y = position.y;
-		w = radius * 2;
-		h = w;
+		this->pos = position - Vector2(squareSize / 2.0);
+		w = squareSize;
+		h = squareSize;
 	}
 
-	bool DetectCollisionTest(AABB other)
+	static bool DetectCollisionTest(AABB a, AABB b)
 	{
 		return
-			x < other.x + other.w &&
-			x + w > other.x &&
-			y < other.y + other.h &&
-			h + y > other.y;
+			a.pos.x < b.pos.x + b.w &&
+			a.pos.x + a.w > b.pos.x &&
+			a.pos.y < b.pos.y + b.h &&
+			a.h + a.pos.y > b.pos.y;
 	}
 };

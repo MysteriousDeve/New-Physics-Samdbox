@@ -72,6 +72,9 @@
     <ClInclude Include="UI\InteractionHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Physics\Geometry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="NewPhysicsEngine.cpp">
@@ -91,6 +94,6 @@
     <None Include="Shaders\Circle.frag" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Shaders\Something.frag" />
+    <Text Include="Shaders\Box.frag" />
   </ItemGroup>
 </Project>

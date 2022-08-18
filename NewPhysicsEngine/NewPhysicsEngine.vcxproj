@@ -118,7 +118,7 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>glfw3.lib;glfw3_mt.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
@@ -146,6 +146,7 @@
     <ClInclude Include="Misc\targetver.h" />
     <ClInclude Include="Physics\Entity.h" />
     <ClInclude Include="Physics\AABB.h" />
+    <ClInclude Include="Physics\Geometry.h" />
     <ClInclude Include="Physics\Transform2D.h" />
     <ClInclude Include="Physics\Scene.h" />
     <ClInclude Include="Renderer\Camera.h" />
@@ -168,7 +169,7 @@
     <None Include="Shaders\Common.vert" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Shaders\Something.frag" />
+    <Text Include="Shaders\Box.frag" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

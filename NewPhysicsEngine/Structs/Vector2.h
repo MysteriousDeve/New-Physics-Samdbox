@@ -13,6 +13,13 @@ struct Vector2
 		this->x = x;
 		this->y = y;
 	}
+
+	Vector2(float xy)
+	{
+		this->x = xy;
+		this->y = xy;
+	}
+
 	
 	Vector2()
 	{

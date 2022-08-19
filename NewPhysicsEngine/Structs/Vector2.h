@@ -61,6 +61,26 @@ struct Vector2
 		return Vector2(x -= a.x, y -= a.y);
 	}
 
+	Vector2 operator*=(float multiplier)
+	{
+		return Vector2(x *= multiplier, y *= multiplier);
+	}
+
+	Vector2 operator/=(float multiplier)
+	{
+		return Vector2(x /= multiplier, y /= multiplier);
+	}
+
+	Vector2 operator+()
+	{
+		return *this;
+	}
+
+	Vector2 operator-()
+	{
+		return Vector2(-x, -y);
+	}
+
 	bool operator==(Vector2 a)
 	{
 		return !(x != a.x || y != a.y);
@@ -75,10 +95,15 @@ struct Vector2
 	// Functions ---------------------------------------
 	//--------------------------------------------------
 
+	void Clear()
+	{
+		*this = Vector2();
+	}
+
 	// The length of the vector
 	float len()
 	{
-		return sqrt(pow(x, 2) + pow(x, 2));
+		return sqrt(lenSq());
 	}
 
 	float lenSq()
@@ -90,9 +115,9 @@ struct Vector2
 	{
 		float l = len();
 		return( 
-			*this = l != 0 ? 
+			*this = (l != 0 ? 
 				*this / l : 
-				Vector2(1, 0)
+				Vector2(1, 0))
 		);
 	}
 
@@ -105,7 +130,7 @@ struct Vector2
 	// Max value of the elements in the vector
 	float Max()
 	{
-		return x > y ? x : y;
+		return std::max(x, y);
 	}
 
 	// Min value of the elements in the vector
@@ -122,12 +147,16 @@ struct Vector2
 		return (*this = Vector2(c * x - s * y, s * x + c * y));
 	}
 
-	//--------------------------------------------------
-	// Casts -------------------------------------------
-	//--------------------------------------------------
+	
 
 	operator glm::vec2() const
 	{
 		return glm::vec2(x, y);
+	}
+
+	
+	static float Dot(Vector2 v1, Vector2 v2)
+	{
+		return v1.x * v2.x + v1.y * v2.y;
 	}
 };

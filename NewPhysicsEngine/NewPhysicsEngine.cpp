@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 #include <string>
 #include <math.h>
+#include <iostream>
 #include <glm/glm.hpp>
 
 #include "Renderer/Renderer.h"
@@ -71,17 +72,19 @@ int main()
     
 
     InteractionHandler handler(win, &cam);
-    Geometry e(
-        Transform2D(
-            Vector2(0, 0),
-            0,
-            Vector2(0.2, 0.2),
-            0
-        ),
-        EntityType::Circle
-    );
-    scene.AddGeometry(e);
-    Geometry* eref = scene.GetGeometryRef(scene.geometries.size() - 1);
+
+    //Geometry e(
+    //    Transform2D(
+    //        Vector2(0, 0),
+    //        0,
+    //        Vector2(0.2, 0.2),
+    //        0
+    //    ),
+    //    EntityType::Circle
+    //);
+    //e.density = 1;
+    //scene.AddGeometry(e);
+    //Geometry* eref = scene.GetGeometryRef(scene.geometries.size() - 1);
 
     double lastTime = glfwGetTime();
     while (!glfwWindowShouldClose(win))
@@ -92,12 +95,14 @@ int main()
         Panning(win);
         renderer.SetCameraTransformation(cam.GetCameraMatrix(), cam.GetPosition());
 
-        eref->transform.position = handler.GetMouseWorldPos();
+        //eref->transform.position = handler.GetMouseWorldPos();
 
         float currentTime = glfwGetTime();
+        float dt = currentTime - lastTime;
+
         if (running)
         {
-            scene.Update((currentTime - lastTime) * 2.0);
+            scene.Update(dt / 20.0);
         }
         lastTime = currentTime;
         
@@ -108,6 +113,19 @@ int main()
                 scene.RenderScene(i, shader); 
             }
         );
+
+        Vector2 mousePos = handler.GetMouseWorldPos();
+        renderer.Render(
+            1,
+            [&mousePos](int i, Shader* shader)
+            {
+                shader->SetUniformVec4("Color", 1, 1, 1, 1);
+                shader->SetUniformVec2("Position", mousePos.x, mousePos.y);
+                shader->SetUniformVec2("Size", 0.1, 0.1);
+            }
+        );
+
+        std::cout << dt;
 
         glfwSwapBuffers(win);
         glfwPollEvents();

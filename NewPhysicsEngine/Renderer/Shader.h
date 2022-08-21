@@ -9,6 +9,7 @@
 #include <cerrno>
 #include <Windows.h>
 #include <glm/glm.hpp>
+#include "../Structs/Color.h"
 using namespace std;
 
 class Shader
@@ -25,7 +26,6 @@ public:
 	{
 		this->vert = vert;
 		this->frag = frag;
-
 	}
 	void Initialize()
 	{
@@ -65,21 +65,26 @@ public:
 	{
 		glUseProgram(ID);
 	}
+
 	void SetUniformVec2(const GLchar* name, float x, float y)
 	{
-		glUniform2f(glGetUniformLocation(ID, name), x, y);
+		glProgramUniform2f(ID, glGetUniformLocation(ID, name), x, y);
 	}
 	void SetUniformVec4(const GLchar* name, float x, float y, float z, float w)
 	{
-		glUniform4f(glGetUniformLocation(ID, name), x, y, z, w);
+		glProgramUniform4f(ID, glGetUniformLocation(ID, name), x, y, z, w);
 	}
 	void SetUniformFloat(const GLchar* name, float x)
 	{
-		glUniform1f(glGetUniformLocation(ID, name), x);
+		glProgramUniform1f(ID, glGetUniformLocation(ID, name), x);
 	}
 	void SetUniformMat4x4(const GLchar* name, glm::mat4x4 mat)
 	{
-		glUniformMatrix4fv(glGetUniformLocation(ID, name), 1, GL_FALSE, &mat[0][0]);
+		glProgramUniformMatrix4fv(ID, glGetUniformLocation(ID, name), 1, GL_FALSE, &mat[0][0]);
+	}
+	void SetColor(const GLchar* name, Color color)
+	{
+		glProgramUniform4f(ID, glGetUniformLocation(ID, name), color.r, color.g, color.b, color.a);
 	}
 
 private:

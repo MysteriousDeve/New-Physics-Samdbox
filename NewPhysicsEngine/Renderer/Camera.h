@@ -3,6 +3,8 @@
 #include <glm/glm.hpp>
 #include "../Structs/Vector2.h"
 
+#define MATRIX_IDENTITY glm::mat4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+
 using namespace glm;
 
 class Camera

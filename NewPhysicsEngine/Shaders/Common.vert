@@ -1,6 +1,6 @@
 #version 460 core
 
-uniform vec2 Position;
+uniform vec2 Position = vec2(0, 0);
 uniform vec2 Size = vec2(0.5, 0.5);
 uniform vec4 Color;
 

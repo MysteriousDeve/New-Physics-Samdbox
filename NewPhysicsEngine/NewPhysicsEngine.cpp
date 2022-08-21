@@ -70,8 +70,8 @@ int main()
     Scene scene;
     scene.InitializeSceneTesting(150);
     
-
     InteractionHandler handler(win, &cam);
+    handler.AddButton(Vector2(-0.5, -0.5), Vector2(0.4, 0.2));
 
     //Geometry e(
     //    Transform2D(
@@ -86,6 +86,9 @@ int main()
     //scene.AddGeometry(e);
     //Geometry* eref = scene.GetGeometryRef(scene.geometries.size() - 1);
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     double lastTime = glfwGetTime();
     while (!glfwWindowShouldClose(win))
     {
@@ -95,17 +98,15 @@ int main()
         Panning(win);
         renderer.SetCameraTransformation(cam.GetCameraMatrix(), cam.GetPosition());
 
-        //eref->transform.position = handler.GetMouseWorldPos();
-
         float currentTime = glfwGetTime();
         float dt = currentTime - lastTime;
-
         if (running)
         {
             scene.Update(dt / 20.0);
         }
         lastTime = currentTime;
         
+
         renderer.Render(
             scene.geometries.size(),
             [&scene](int i, Shader* shader) 
@@ -114,6 +115,10 @@ int main()
             }
         );
 
+        handler.UIRaycast();
+        handler.RenderButtons();
+
+        renderer.SetCameraTransformation(glm::inverse(cam.GetScalingMatrix()), vec2(0, 0));
         Vector2 mousePos = handler.GetMouseWorldPos();
         renderer.Render(
             1,
@@ -124,9 +129,6 @@ int main()
                 shader->SetUniformVec2("Size", 0.1, 0.1);
             }
         );
-
-        std::cout << dt;
-
         glfwSwapBuffers(win);
         glfwPollEvents();
     }

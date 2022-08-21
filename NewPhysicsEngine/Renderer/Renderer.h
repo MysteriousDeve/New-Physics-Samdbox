@@ -6,6 +6,7 @@
 #include "Mesh.h"
 #include "Shader.h"
 #include "../Physics/Scene.h"
+#include "../Structs/Color.h"
 
 class Renderer
 {
@@ -14,6 +15,8 @@ private:
 	Shader* shader = nullptr;
 
 public:
+	Renderer() {}
+
 	Renderer(MeshInfo meshInfo, string vert, string frag)
 	{
 		mesh = new Mesh(meshInfo);

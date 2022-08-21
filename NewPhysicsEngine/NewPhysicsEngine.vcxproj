@@ -155,6 +155,7 @@
     <ClInclude Include="Renderer\Shader.h" />
     <ClInclude Include="Structs\Color.h" />
     <ClInclude Include="Structs\Vector2.h" />
+    <ClInclude Include="UI\Button.h" />
     <ClInclude Include="UI\InteractionHandler.h" />
   </ItemGroup>
   <ItemGroup>

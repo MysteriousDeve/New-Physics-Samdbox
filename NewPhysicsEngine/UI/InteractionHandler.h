@@ -62,9 +62,23 @@ public:
 		return Vector2(vec[0] * pow(camera->GetWHratio(), 2), vec[1]);
 	}
 
+	Vector2 GetMouseScreenPos()
+	{
+		double x, y;
+		glfwGetCursorPos(window, &x, &y);
+		return Vector2(x, y);
+	}
+
+	Vector2 GetWindowSize()
+	{
+		int x, y;
+		glfwGetWindowSize(window, &x, &y);
+		return Vector2(x, y);
+	}
+
 	void UIRaycast()
 	{
-		Vector2 mousePos = GetMouseWorldPos();
+		Vector2 mousePos = GetMouseScreenPos();
 		for (auto& b : buttons)
 		{
 			if (b->isInside(mousePos))
@@ -89,19 +103,35 @@ public:
 
 	void RenderButtons()
 	{
+
+		float WHRatio = camera->GetWHratio();
+		Vector2 windowSize = GetWindowSize();
+
 		vector<Vector2> posVector;
+		vector<Vector2> sizeVector;
 		vector<Color> colorVector;
 		for (auto& x : buttons)
 		{
-			posVector.push_back(x->transform.position);
+			Vector2 pos = x->transform.position, size = x->transform.scale;
+			Vector2 transformedSize (
+				size.x / windowSize.x,
+				size.y / windowSize.y
+			);
+			sizeVector.push_back(transformedSize);
+			posVector.push_back(Vector2(
+				pos.x / windowSize.x * 2 + 1 - transformedSize.x / 2.0,
+				pos.y / windowSize.y * 2 + 1 - transformedSize.y / 2.0
+			));
+
 			colorVector.push_back(x->color);
 		}
 		renderer->Render(
 			buttons.size(), 
-			[posVector, colorVector](int i, Shader* shader)
+			[posVector, colorVector, sizeVector](int i, Shader* shader)
 			{
 				shader->SetColor("Color", colorVector[i]);
 				shader->SetUniformVec2("Position", posVector[i].x, posVector[i].y);
+				shader->SetUniformVec2("Size", sizeVector[i].x, sizeVector[i].y);
 			}
 		);
 	}

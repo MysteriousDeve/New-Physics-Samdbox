@@ -71,7 +71,7 @@ int main()
     scene.InitializeSceneTesting(150);
     
     InteractionHandler handler(win, &cam);
-    handler.AddButton(Vector2(-0.5, -0.5), Vector2(0.4, 0.2));
+    handler.AddButton(Vector2(), Vector2(300, 300));
 
     //Geometry e(
     //    Transform2D(

@@ -7,6 +7,7 @@ using namespace std;
 struct Vector2
 {
 	float x = 0, y = 0;
+	union { float xy[1]; } xx, yy;
 
 	Vector2(float x, float y)
 	{

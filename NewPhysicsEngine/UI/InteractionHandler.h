@@ -114,13 +114,13 @@ public:
 		{
 			Vector2 pos = x->transform.position, size = x->transform.scale;
 			Vector2 transformedSize (
-				size.x / windowSize.x,
-				size.y / windowSize.y
+				size.x / windowSize.x * 2,
+				size.y / windowSize.y * 2
 			);
 			sizeVector.push_back(transformedSize);
 			posVector.push_back(Vector2(
-				pos.x / windowSize.x * 2 + 1 - transformedSize.x / 2.0,
-				pos.y / windowSize.y * 2 + 1 - transformedSize.y / 2.0
+				(pos.x / windowSize.x - 0.5) * 2 + transformedSize.x / 2.0,
+				- (pos.y / windowSize.y - 0.5) * 2 - transformedSize.y / 2.0
 			));
 
 			colorVector.push_back(x->color);

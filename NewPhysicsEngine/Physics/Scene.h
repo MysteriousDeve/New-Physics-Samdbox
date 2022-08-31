@@ -91,17 +91,26 @@ public:
 		{
 			for (int j = i + 1; j < size; j++)
 			{
-				bool cond = AABB::DetectCollisionTest(geometries[i].boundingBox, geometries[j].boundingBox);
+				bool cond = AABBPairTest(geometries[i], geometries[j]);
 				if (cond)
 				{
 					testList.push_back(CollisionTestInfo(i, j));
-					geometries[i].color = Color(0, 0.75, 1);
-					geometries[j].color = Color(0, 0.75, 1);
 				}
 			}
 		}
 		return testList;
 	}
+	bool AABBPairTest(Geometry a, Geometry b)
+	{
+		bool cond = AABB::DetectCollisionTest(a.boundingBox, b.boundingBox);
+		if (cond)
+		{
+			a.color = Color(0, 0.75, 1);
+			b.color = Color(0, 0.75, 1);
+		}
+		return cond;
+	}
+
 	vector<CollisionInfo> NarrowCollisionsTest(vector<CollisionTestInfo> testList)
 	{
 		int size = geometries.size();
@@ -141,7 +150,7 @@ public:
 			geometries[i].CalculateAABB();
 		}
 		return NarrowCollisionsTest(
-			AABBCollisionsTest(geometries)
+			SpatialSubdivisionTest()
 		);
 	}
 	
@@ -294,11 +303,30 @@ vector<Scene::CollisionTestInfo> Scene::SpatialSubdivisionTest()
 
 	vector<CollisionTestInfo> SubdivisionCollisionList;
 
-	for (auto& i : cells)
+	for (int i = 0; i < cells.size(); i++)
 	{
-		for (auto& j : i)
+		for (int j = 0; j < cells.size(); i++)
 		{
-			vector<CollisionTestInfo> currentCellTest = Scene::AABBCollisionsTest(j);
+			if (j < cells.size() - 1)
+			{
+				vector<Geometry> c0 = cells[i][j], c1 = cells[i][j + 1];
+				for (int k = 0; k < cells.size(); k++)
+				{
+					for (int l = 0; l < cells.size(); l++)
+					{
+						if (Scene::AABBPairTest(c0[k], c1[l]))
+						{
+							SubdivisionCollisionList.push_back(
+								CollisionTestInfo(
+									k, l
+								)
+							);
+						}
+					}
+				}
+			}
+
+			vector<CollisionTestInfo> currentCellTest = Scene::AABBCollisionsTest(cells[i][j]);
 
 			SubdivisionCollisionList.insert(
 				SubdivisionCollisionList.end(),

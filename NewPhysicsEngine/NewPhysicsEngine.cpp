@@ -68,7 +68,7 @@ int main()
     renderer.Initialize();
     
     Scene scene;
-    scene.InitializeSceneTesting(150);
+    scene.InitializeSceneTesting(300);
     
     InteractionHandler handler(win, &cam);
     handler.AddButton(Vector2(), Vector2(300, 300));

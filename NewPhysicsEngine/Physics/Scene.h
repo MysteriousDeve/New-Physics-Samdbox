@@ -149,9 +149,12 @@ public:
 			geometries[i].color = Color(0, 0.5, 1);
 			geometries[i].CalculateAABB();
 		}
-		return NarrowCollisionsTest(
-			SpatialSubdivisionTest()
-		);
+
+		return NarrowCollisionsTest(AABBCollisionsTest(geometries));
+		//NarrowCollisionsTest(
+		//	SpatialSubdivisionTest()
+		//);
+		
 	}
 	
 	// Collisions solver
@@ -305,14 +308,15 @@ vector<Scene::CollisionTestInfo> Scene::SpatialSubdivisionTest()
 
 	for (int i = 0; i < cells.size(); i++)
 	{
-		for (int j = 0; j < cells.size(); i++)
+		int rowSize = cells[i].size();
+		for (int j = 0; j < rowSize; j++)
 		{
-			if (j < cells.size() - 1)
+			if (j < rowSize - 1)
 			{
 				vector<Geometry> c0 = cells[i][j], c1 = cells[i][j + 1];
-				for (int k = 0; k < cells.size(); k++)
+				for (int k = 0; k < c0.size(); k++)
 				{
-					for (int l = 0; l < cells.size(); l++)
+					for (int l = 0; l < c1.size(); l++)
 					{
 						if (Scene::AABBPairTest(c0[k], c1[l]))
 						{

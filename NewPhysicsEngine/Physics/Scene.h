@@ -306,14 +306,18 @@ vector<Scene::CollisionTestInfo> Scene::SpatialSubdivisionTest()
 
 	vector<CollisionTestInfo> SubdivisionCollisionList;
 
+	// for every x-group cells (row)
 	for (int i = 0; i < cells.size(); i++)
 	{
 		int rowSize = cells[i].size();
+
+		// for every y-group cells (column)
 		for (int j = 0; j < rowSize; j++)
 		{
 			if (j < rowSize - 1)
 			{
 				vector<Geometry> c0 = cells[i][j], c1 = cells[i][j + 1];
+
 				for (int k = 0; k < c0.size(); k++)
 				{
 					for (int l = 0; l < c1.size(); l++)
@@ -330,6 +334,7 @@ vector<Scene::CollisionTestInfo> Scene::SpatialSubdivisionTest()
 				}
 			}
 
+			// Test for every objects in a single cells
 			vector<CollisionTestInfo> currentCellTest = Scene::AABBCollisionsTest(cells[i][j]);
 
 			SubdivisionCollisionList.insert(

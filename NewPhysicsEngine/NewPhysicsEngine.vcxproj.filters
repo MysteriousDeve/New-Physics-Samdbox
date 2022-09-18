@@ -78,6 +78,12 @@
     <ClInclude Include="UI\Button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Include.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectInclude.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="NewPhysicsEngine.cpp">

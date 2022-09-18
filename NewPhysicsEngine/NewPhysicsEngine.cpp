@@ -1,10 +1,4 @@
-#include <Windows.h>
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <string>
-#include <math.h>
-#include <iostream>
-#include <glm/glm.hpp>
+#include "ProjectInclude.h"
 
 #include "Renderer/Renderer.h"
 #include "Renderer/Camera.h"

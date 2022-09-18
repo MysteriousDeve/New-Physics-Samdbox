@@ -4,6 +4,7 @@
 
 struct Transform2D
 {
+	// The center of mass
 	Vector2 position = Vector2(0, 0);
 	float rotation = 0;
 	Vector2 scale = Vector2(1, 1);

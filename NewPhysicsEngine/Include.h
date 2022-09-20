@@ -8,3 +8,7 @@
 #include <iostream>
 #include <glm/glm.hpp>
 #include <functional>
+#include <vector>
+
+typedef float dec;
+typedef int num;

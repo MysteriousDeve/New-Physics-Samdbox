@@ -147,6 +147,7 @@
     <ClInclude Include="Misc\targetver.h" />
     <ClInclude Include="Physics\Entity.h" />
     <ClInclude Include="Physics\AABB.h" />
+    <ClInclude Include="Physics\EntityUnion.h" />
     <ClInclude Include="Physics\Geometry.h" />
     <ClInclude Include="ProjectInclude.h" />
     <ClInclude Include="Physics\Transform2D.h" />

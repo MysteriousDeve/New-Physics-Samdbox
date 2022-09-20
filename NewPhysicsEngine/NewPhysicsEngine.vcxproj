@@ -149,6 +149,7 @@
     <ClInclude Include="Physics\AABB.h" />
     <ClInclude Include="Physics\EntityUnion.h" />
     <ClInclude Include="Physics\Geometry.h" />
+    <ClInclude Include="Physics\PhysicsSolverFunc.h" />
     <ClInclude Include="ProjectInclude.h" />
     <ClInclude Include="Physics\Transform2D.h" />
     <ClInclude Include="Physics\Scene.h" />

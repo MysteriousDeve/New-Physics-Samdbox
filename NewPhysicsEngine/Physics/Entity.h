@@ -41,7 +41,8 @@ struct Entity
 	bool isGeometry = false;
 
 	// Entity-specific properties
-	EntityUnion::EntityProp props;
+	EntityData::EntityProp props;
+	EntityData::Geom geom;
 
 	/*
 		Collision filter properties.
@@ -56,5 +57,16 @@ struct Entity
 		this->transform = transform;
 		this->entityType = type;
 		this->isGeometry = (type >> 8) & 1;
+	}
+
+	float GetMass()
+	{
+		if (isGeometry) return geom.density * geom.area;
+		throw exception("Get mass called on non-geometry objects");
+	}
+
+	void RecalculateArea()
+	{
+
 	}
 };

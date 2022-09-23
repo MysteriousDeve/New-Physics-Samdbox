@@ -14,8 +14,6 @@ using namespace std;
 
 class Scene
 {
-private:
-
 public:
 	struct CollisionTestInfo
 	{
@@ -43,7 +41,7 @@ public:
 	};
 	vector<CollisionInfo> lastStepCollisionInfo;
 	vector<Geometry> geometries;
-	Vector2 gravity = Vector2(0, -20);
+	Vector2 gravity = Vector2(0, -10);
 
 	// Constructor
 	Scene() {}
@@ -59,25 +57,12 @@ public:
 		return &geometries[i];
 	}
 
-	// Verlet solver
+	// Apply gravity
 	void ApplyGravity(float dt)
 	{
 		for (auto& x : geometries)
 		{
-			x.vel += gravity * dt;
-		}
-	}
-	void ApplyConstraint()
-	{
-		for (auto& x : geometries)
-		{
-			float len = x.transform.position.len();
-			float dist = 1 - x.transform.scale.x / 2.0;
-			if (len > dist)
-			{
-				x.transform.position.Clear();
-				// x.vel = x.transform.position.Normalize() * x.vel.len();
-			}
+			x.vel += gravity * dt * (x.isGeometry && (x.entityType & 1) < 3) * x.geom.gravityScale;
 		}
 	}
 
@@ -206,6 +191,7 @@ public:
 		dt /= 3;
 		for (int i = 0; i < 3; i++)
 		{
+			ApplyGravity(dt);
 			lastStepCollisionInfo = DetectCollision();
 			SolveCollision(lastStepCollisionInfo, dt);
 			SolveOverlap(lastStepCollisionInfo, dt);
@@ -219,14 +205,6 @@ public:
 		for (auto& t : geometries)
 		{
 			Vector2 pos = t.transform.position;
-			if (pos.x > 1)
-			{
-				t.transform.position.x -= 2;
-			}
-			else if (pos.x < -1)
-			{
-				t.transform.position.x += 2;
-			}
 			if (pos.y > 1)
 			{
 				t.transform.position.y -= 2;
@@ -256,7 +234,6 @@ void Scene::InitializeSceneTesting(int nOfTestEntities)
 		Geometry g(
 			Transform2D(
 				Vector2((rand()) / float(RAND_MAX) - 0.5f, (rand()) / float(RAND_MAX) - 0.5f) / 2.0,
-				0,
 				Vector2(randRadius, randRadius),
 				0
 			),
@@ -267,7 +244,7 @@ void Scene::InitializeSceneTesting(int nOfTestEntities)
 			(rand()) / float(RAND_MAX) - 0.5f,
 			(rand()) / float(RAND_MAX) - 0.5f
 		) * 16;
-		g.restitution = 1;
+		g.restitution = 0.25;
 		geometries.push_back(g);
 	}
 }

@@ -10,7 +10,7 @@ enum VisualizationEnum
 	ANGULAR_VELOCITY     = 8u,
 };
 
-namespace EntityUnion
+namespace EntityData
 {
 	// Geometries
 	struct Geom
@@ -24,24 +24,25 @@ namespace EntityUnion
 		float restitution;
 		float reflectiveness;
 		float refractiveIndex;
-		float gravityScale;
+		float gravityScale = 1;
+		float area = 1;
 		unsigned char visualizationMode = NULL;
 	};
-	struct Circle : Geom
+	struct Circle
 	{
 		float radius;
 		bool drawAngleIndicator;
 	};
-	struct Box : Geom
+	struct Box
 	{
 
 	};
-	struct Poly : Geom
+	struct Poly
 	{
 		std::vector<std::vector<Vector2>*>* processedSurfaces;
 		std::vector<Vector2>* rawSurfaces;
 	};
-	struct Plane : Geom
+	struct Plane
 	{
 		Vector2 normal;
 	};

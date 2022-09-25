@@ -93,4 +93,22 @@ public:
 	{
 		return vec2();
 	}
+
+	void SetZoom(float newZoom)
+	{
+		if (newZoom > 0)
+		{
+			zoom = newZoom; return;
+		}
+		throw exception("New zoom is negative");
+	}
+
+	void Zoom(float scale)
+	{
+		if (scale > 0)
+		{
+			zoom /= scale; return;
+		}
+		throw exception("Zoom multiplier is negative");
+	}
 };

@@ -57,7 +57,14 @@ struct CollisionWrapper
 
 const CollisionWrapper Detect_CircleCircle(Entity a, Entity b)
 {
-	
+	return CollisionWrapper
+	(
+		false,
+		CollisionInfo
+		(
+
+		)
+	);
 }
 
 const CollisionWrapper Detect_CirclePlane(Entity circle, Entity plane)

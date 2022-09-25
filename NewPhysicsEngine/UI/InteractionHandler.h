@@ -135,4 +135,9 @@ public:
 			}
 		);
 	}
+
+	void OnScroll(GLFWwindow* window, double xoffset, double yoffset)
+	{
+		camera->Zoom(pow(1.5, yoffset));
+	}
 };

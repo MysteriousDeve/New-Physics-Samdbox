@@ -137,7 +137,7 @@ struct Vector2
 	// Min value of the elements in the vector
 	float Min()
 	{
-		return x < y ? x : y;
+		return std::min(x, y);
 	}
 
 	// Rotate the vector by a specified angle in radian
@@ -148,13 +148,16 @@ struct Vector2
 		return (*this = Vector2(c * x - s * y, s * x + c * y));
 	}
 
+	float InternalMultiply()
+	{
+		return x * y;
+	}
 	
 
 	operator glm::vec2() const
 	{
 		return glm::vec2(x, y);
 	}
-
 	
 	static float Dot(Vector2 v1, Vector2 v2)
 	{

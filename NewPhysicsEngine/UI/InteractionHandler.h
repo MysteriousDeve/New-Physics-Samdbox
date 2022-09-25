@@ -41,7 +41,6 @@ public:
 		);
 		renderer->Initialize();
 	}
-
 	~InteractionHandler()
 	{
 		renderer->Terminate();
@@ -100,7 +99,6 @@ public:
 		buttons.push_back(button);
 		return button;
 	}
-
 	void RenderButtons()
 	{
 
@@ -138,6 +136,6 @@ public:
 
 	void OnScroll(GLFWwindow* window, double xoffset, double yoffset)
 	{
-		camera->Zoom(pow(1.5, yoffset));
+		camera->Zoom(pow(1.25, yoffset));
 	}
 };

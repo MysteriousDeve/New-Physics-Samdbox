@@ -160,11 +160,12 @@
     <ClInclude Include="Structs\Color.h" />
     <ClInclude Include="Structs\Vector2.h" />
     <ClInclude Include="UI\Button.h" />
+    <ClInclude Include="UI\EventCall.h" />
     <ClInclude Include="UI\InteractionHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c" />
-    <ClCompile Include="NewPhysicsEngine.cpp" />
+    <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Misc\NewPhysicsEngine.rc" />

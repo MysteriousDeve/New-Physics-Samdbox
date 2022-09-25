@@ -2,11 +2,14 @@
 
 #include "Renderer/Renderer.h"
 #include "Renderer/Camera.h"
+
 #include "Physics/Scene.h"
 #include "Physics/Entity.h"
 #include "Physics/Geometry.h"
 #include "Physics/Transform2D.h"
+
 #include "UI/InteractionHandler.h"
+#include "UI/EventCall.h"
 
 using namespace std;
 using namespace glm;
@@ -37,6 +40,9 @@ int main()
         return -1;
     }
     InitializeWindow(win);
+
+    glfwSetScrollCallback(win, OnScroll);
+    
     
     gladLoadGL();
     glViewport(0, 0, w, h);
@@ -66,6 +72,7 @@ int main()
     
     InteractionHandler handler(win, &cam);
     handler.AddButton(Vector2(), Vector2(300, 300));
+    eventHandler.push_back(&handler);
 
     //Geometry e(
     //    Transform2D(

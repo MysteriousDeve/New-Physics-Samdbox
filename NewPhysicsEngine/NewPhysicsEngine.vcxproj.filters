@@ -90,9 +90,12 @@
     <ClInclude Include="Physics\PhysicsSolverFunc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="UI\EventCall.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="NewPhysicsEngine.cpp">
+    <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="glad.c">

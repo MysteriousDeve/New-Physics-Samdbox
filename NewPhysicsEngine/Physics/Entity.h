@@ -57,16 +57,56 @@ struct Entity
 		this->transform = transform;
 		this->entityType = type;
 		this->isGeometry = (type >> 8) & 1;
+
+		SetArea();
+		SetMass();
+	}
+
+	void InitCircle()
+	{
+
+	}
+
+	float CircleArea()
+	{
+		return pow(props.circle.radius, 2i32) * PI;
+	}
+
+	float BoxArea()
+	{
+		return transform.scale.InternalMultiply();
+	}
+
+	float PolygonArea()
+	{
+		return 1;
+	}	
+	
+	float GetArea()
+	{
+		return geom.area;
+	}
+
+	float SetArea()
+	{
+		int id = entityType % 256;
+		switch (id)
+		{
+			case 2:   return (geom.area = PolygonArea());
+			case 1:   return (geom.area = BoxArea());
+			default:  return (geom.area = CircleArea());
+		}
 	}
 
 	float GetMass()
 	{
-		if (isGeometry) return geom.density * geom.area;
-		throw exception("Get mass called on non-geometry objects");
+		return geom.mass;
 	}
 
-	void RecalculateArea()
+	float SetMass()
 	{
-
+		if (isGeometry) return (geom.mass = geom.density * geom.area);
+		throw exception("Set mass called on non-geometry objects");
 	}
 };
+

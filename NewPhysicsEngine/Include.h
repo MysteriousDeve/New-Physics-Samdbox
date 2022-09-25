@@ -9,6 +9,8 @@
 #include <glm/glm.hpp>
 #include <functional>
 #include <vector>
+#include <array>
+#include <algorithm>
 
 typedef float dec;
 typedef int num;

@@ -9,36 +9,13 @@
 #include "Entity.h"
 #include "Geometry.h"
 
+#include "PhysicsSolverFunc.h"
 
 using namespace std;
 
 class Scene
 {
 public:
-	struct CollisionTestInfo
-	{
-		int a, b;
-		CollisionTestInfo(int a, int b)
-		{
-			this->a = a;
-			this->b = b;
-		}
-	};
-	struct CollisionInfo
-	{
-		int a, b;
-		Vector2 normal;
-		float depth;
-		bool isMovingTowardEachOther;
-		CollisionInfo(int a, int b, Vector2 normal, float depth, bool isMovingTowardEachOther)
-		{
-			this->a = a;
-			this->b = b;
-			this->normal = normal;
-			this->depth = depth;
-			this->isMovingTowardEachOther = isMovingTowardEachOther;
-		}
-	};
 	vector<CollisionInfo> lastStepCollisionInfo;
 	vector<Geometry> geometries;
 	Vector2 gravity = Vector2(0, -10);
@@ -249,7 +226,7 @@ void Scene::InitializeSceneTesting(int nOfTestEntities)
 	}
 }
 
-vector<Scene::CollisionTestInfo> Scene::SpatialSubdivisionTest()
+vector<CollisionTestInfo> Scene::SpatialSubdivisionTest()
 {
 	int size = geometries.size();
 

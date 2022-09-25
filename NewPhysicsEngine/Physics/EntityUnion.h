@@ -18,6 +18,9 @@ namespace EntityData
 		Vector2 COM; // Center of mass
 		Vector2 angle;
 
+		Vector2 vel;
+		float angvel;
+
 		float adhesion;
 		float density;
 		float friction;
@@ -25,8 +28,11 @@ namespace EntityData
 		float reflectiveness;
 		float refractiveIndex;
 		float gravityScale = 1;
-		float area = 1;
+		
 		unsigned char visualizationMode = NULL;
+		
+		float area = 1;
+		float mass = 1;
 	};
 	struct Circle
 	{

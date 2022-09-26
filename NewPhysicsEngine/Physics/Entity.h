@@ -4,7 +4,7 @@
 #include "../Structs/Color.h"
 #include "Transform2D.h"
 #include "AABB.h"
-#include "EntityUnion.h"
+#include "EntityDataStruct.h"
 
 constexpr unsigned int WATER_COLLISION  = 1 << 30;
 constexpr unsigned int HETERO_COLLISION = 1 << 31;
@@ -32,6 +32,9 @@ enum EntityType
 
 struct Entity
 {
+	// 1. Geometries, 2. Non-geometries, 3. External Components
+	int ref[3];
+
 	Transform2D transform;
 	EntityType entityType = EntityType::Nothing;
 

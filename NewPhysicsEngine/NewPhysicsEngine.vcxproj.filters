@@ -84,7 +84,7 @@
     <ClInclude Include="ProjectInclude.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Physics\EntityUnion.h">
+    <ClInclude Include="Physics\EntityDataStruct.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Physics\PhysicsSolverFunc.h">

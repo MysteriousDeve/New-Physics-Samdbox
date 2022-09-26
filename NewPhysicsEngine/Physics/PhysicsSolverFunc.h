@@ -55,7 +55,7 @@ struct CollisionWrapper
 
 // Narrow-phase methods //////////////////////////////////
 
-const CollisionWrapper Detect_CircleCircle(Entity a, Entity b)
+const CollisionWrapper Detect_CircleCircle(Entity* a, Entity* b)
 {
 	return CollisionWrapper
 	(
@@ -67,11 +67,11 @@ const CollisionWrapper Detect_CircleCircle(Entity a, Entity b)
 	);
 }
 
-const CollisionWrapper Detect_CirclePlane(Entity circle, Entity plane)
+const CollisionWrapper Detect_CirclePlane(Entity* circle, Entity* plane)
 {
-	Vector2 planeNormal = plane.props.plane.normal;
-	Vector2 planePos = plane.transform.position;
-	Vector2 closestPointToPlane = circle.transform.position - planeNormal * circle.props.circle.radius;
+	Vector2 planeNormal = plane->props.plane.normal;
+	Vector2 planePos = plane->transform.position;
+	Vector2 closestPointToPlane = circle->transform.position - planeNormal * circle->props.circle.radius;
 
 	float dist = (planeNormal.x * (planePos.y - planeNormal.y) - planeNormal.y * (planePos.x - planeNormal.x));
 

@@ -16,8 +16,9 @@ using namespace std;
 class Scene
 {
 public:
-	vector<CollisionInfo> lastStepCollisionInfo;
-	vector<Geometry> geometries;
+	vector<Entity> entities;
+	vector<EntityData::Geom> geometries;
+
 	Vector2 gravity = Vector2(0, -10);
 
 	// Constructor
@@ -179,7 +180,7 @@ public:
 		}
 
 		// Bounding obj in a 2x2 box
-		for (auto& t : geometries)
+		/*for (auto& t : geometries)
 		{
 			Vector2 pos = t.transform.position;
 			if (pos.y > 1)
@@ -190,7 +191,7 @@ public:
 			{
 				t.transform.position.y += 2;
 			}
-		}
+		}*/
 	}
 
 	void RenderScene(int i, Shader* shader)
@@ -201,6 +202,8 @@ public:
 		shader->SetUniformVec2("Size", e.transform.scale.x, e.transform.scale.y);
 	}
 };
+
+
 
 void Scene::InitializeSceneTesting(int nOfTestEntities)
 {

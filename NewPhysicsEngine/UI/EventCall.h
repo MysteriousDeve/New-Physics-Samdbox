@@ -9,6 +9,6 @@ void OnScroll(GLFWwindow* window, double xoffset, double yoffset)
 {
 	for (auto& h : eventHandler)
 	{
-		h->OnScroll(window, xoffset, yoffset);
+		if (glfwGetWindowAttrib(window, GLFW_FOCUSED)) h->OnScroll(window, xoffset, yoffset);
 	}
 }

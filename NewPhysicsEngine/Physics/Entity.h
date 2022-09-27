@@ -35,7 +35,6 @@ struct Entity
 	// 1. Geometries, 2. Non-geometries, 3. External Components
 	int ref[3];
 
-	Transform2D transform;
 	EntityType entityType = EntityType::Nothing;
 
 	// Appearance
@@ -46,14 +45,6 @@ struct Entity
 	// Entity-specific properties
 	EntityData::EntityProp props;
 	EntityData::Geom geom;
-
-	/*
-		Collision filter properties.
-		The first 30 bits is for collision layer,
-			the 31th is for water collision,
-			and 32th is for hetero-collision.
-	 */
-	unsigned int collideSet = 0x01 | WATER_COLLISION;
 
 	Entity(Transform2D transform, EntityType type)
 	{

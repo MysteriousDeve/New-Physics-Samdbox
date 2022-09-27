@@ -12,10 +12,19 @@ enum VisualizationEnum
 
 namespace EntityData
 {
-	// Geometries
 	struct Geom
 	{
-		Vector2 COM; // Center of mass
+		/*
+			Collision filter properties.
+			The first 30 bits is for collision layer,
+			the 31th is for water collision,
+			and 32th is for hetero-collision.
+		 */
+
+
+		unsigned int collideSet = 0x01 | WATER_COLLISION;
+
+		Vector2 COM;
 		Vector2 angle;
 
 		float gravityScale = 1;
@@ -59,7 +68,7 @@ namespace EntityData
 	// Constraint
 	struct Constraint
 	{
-		float geom0, geom1;
+		int geom0, geom1;
 		Vector2 geom0pos, geom1pos;
 	};
 	struct Axle : Constraint
@@ -85,18 +94,28 @@ namespace EntityData
 	};
 
 	// Non-constraint
+	struct Nonconstraint
+	{
+		Vector2 relativePosition;
+	};
 	struct Tracer
 	{
 		float fadeTime;
+		const bool independent = false;
 	};
 	struct Thruster
 	{
 		float force;
+		float rotation;
+		const bool independent = false;
 	};
 	struct Laser
 	{
 		float fadeDist;
 		float laserVelocity;
+		float rotation;
+		bool independent;
+		bool followGeometry = true;
 	};
 
 	// Union to save data and improve performance

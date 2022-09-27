@@ -16,23 +16,22 @@ using namespace std;
 class Scene
 {
 public:
-	vector<Entity> entities;
-	vector<EntityData::Geom> geometries;
-
+	vector<array<EntityData::Geom, 64>> geometries;
 	Vector2 gravity = Vector2(0, -10);
+	vector<array<Entity, 64>> entities;
 
 	// Constructor
 	Scene() {}
 
 	void InitializeSceneTesting(int nOfTestEntities);
 
-	void AddGeometry(Geometry g)
+	Entity* CreateGeometry()
 	{
-		geometries.push_back(g);
+		return new Entity(Transform2D(), EntityType::Nothing);
 	}
-	Geometry* GetGeometryRef(int i)
+	EntityData::Geom* GetGeometryRef(int i)
 	{
-		return &geometries[i];
+		return &geometries[i / 64][i % 64];
 	}
 
 	// Apply gravity

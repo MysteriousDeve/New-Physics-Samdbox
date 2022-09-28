@@ -2,6 +2,9 @@
 
 #include "../ProjectInclude.h"
 
+constexpr unsigned int WATER_COLLISION = 1 << 30;
+constexpr unsigned int HETERO_COLLISION = 1 << 31;
+
 enum VisualizationEnum
 {
 	FORCE                = 1u,
@@ -20,8 +23,6 @@ namespace EntityData
 			the 31th is for water collision,
 			and 32th is for hetero-collision.
 		 */
-
-
 		unsigned int collideSet = 0x01 | WATER_COLLISION;
 
 		Vector2 COM;
@@ -46,6 +47,7 @@ namespace EntityData
 		
 		unsigned char visualizationMode = NULL;
 	};
+
 	struct Circle
 	{
 		float radius;

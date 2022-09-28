@@ -6,9 +6,6 @@
 #include "AABB.h"
 #include "EntityDataStruct.h"
 
-constexpr unsigned int WATER_COLLISION  = 1 << 30;
-constexpr unsigned int HETERO_COLLISION = 1 << 31;
-
 enum EntityType
 {
 	Nothing    = 0,
@@ -55,6 +52,8 @@ struct Entity
 		SetArea();
 		SetMass();
 	}
+
+	Entity() {}
 
 	void InitCircle()
 	{

@@ -15,7 +15,6 @@ struct CollisionTestInfo
 		this->b = b;
 	}
 };
-
 struct CollisionInfo
 {
 	int a, b;
@@ -117,7 +116,7 @@ const void Solve_CircleCircle(Entity a, Entity b)
 
 const void Solve_CirclePlane(Entity circle, Entity plane)
 {
-
+	
 }
 
 const std::function<void(Entity, Entity)> solveFuncList[]

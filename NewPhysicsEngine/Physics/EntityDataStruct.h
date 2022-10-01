@@ -15,6 +15,32 @@ enum VisualizationEnum
 
 namespace EntityData
 {
+	struct Circle
+	{
+		float radius;
+		bool drawAngleIndicator;
+	};
+	struct Box
+	{
+		Vector2 size;
+	};
+	struct Poly
+	{
+		std::vector<std::vector<Vector2>*>* processedSurfaces;
+		std::vector<Vector2>* rawSurfaces;
+	};
+	struct Plane
+	{
+		Vector2 normal;
+	};
+	union GeometryProps
+	{
+		Circle circle;
+		Box box;
+		Poly polygon;
+		Plane plane;
+	};
+
 	struct Geom
 	{
 		bool isExist = true;
@@ -51,26 +77,10 @@ namespace EntityData
 		float adhesion;
 		
 		unsigned char visualizationMode = NULL;
+
+		GeometryProps props;
 	};
 
-	struct Circle
-	{
-		float radius;
-		bool drawAngleIndicator;
-	};
-	struct Box
-	{
-		Vector2 size;
-	};
-	struct Poly
-	{
-		std::vector<std::vector<Vector2>*>* processedSurfaces;
-		std::vector<Vector2>* rawSurfaces;
-	};
-	struct Plane
-	{
-		Vector2 normal;
-	};
 
 	// Constraint
 	struct Constraint

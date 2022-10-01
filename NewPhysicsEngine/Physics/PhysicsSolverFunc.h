@@ -8,8 +8,8 @@
 
 struct CollisionTestInfo
 {
-	int a, b;
-	CollisionTestInfo(int a, int b)
+	EntityData::Geom *a, *b;
+	CollisionTestInfo(EntityData::Geom* a, EntityData::Geom* b)
 	{
 		this->a = a;
 		this->b = b;
@@ -17,17 +17,19 @@ struct CollisionTestInfo
 };
 struct CollisionInfo
 {
-	int a, b;
+	int collisionType;
+	EntityData::Geom *a, *b;
 	Vector2 normal;
 	float depth;
 	bool isMovingTowardEachOther;
-	CollisionInfo(int a, int b, Vector2 normal, float depth, bool isMovingTowardEachOther)
+	CollisionInfo(int collisionType, EntityData::Geom* a, EntityData::Geom* b, Vector2 normal, float depth, bool isMovingTowardEachOther)
 	{
 		this->a = a;
 		this->b = b;
 		this->normal = normal;
 		this->depth = depth;
 		this->isMovingTowardEachOther = isMovingTowardEachOther;
+		this->collisionType = collisionType;
 	}
 
 	CollisionInfo()
@@ -66,11 +68,11 @@ const CollisionWrapper Detect_CircleCircle(Entity* a, Entity* b)
 	);
 }
 
-const CollisionWrapper Detect_CirclePlane(Entity* circle, Entity* plane)
+const CollisionWrapper Detect_CirclePlane(EntityData::Geom* circle, EntityData::Geom* plane)
 {
 	Vector2 planeNormal = plane->props.plane.normal;
-	Vector2 planePos = plane->transform.position;
-	Vector2 closestPointToPlane = circle->transform.position - planeNormal * circle->props.circle.radius;
+	Vector2 planePos = plane->COM;
+	Vector2 closestPointToPlane = circle->COM - planeNormal * circle->props.circle.radius;
 
 	float dist = (planeNormal.x * (planePos.y - planeNormal.y) - planeNormal.y * (planePos.x - planeNormal.x));
 
@@ -84,13 +86,13 @@ const CollisionWrapper Detect_CirclePlane(Entity* circle, Entity* plane)
 	);
 }
 
-const std::function<CollisionWrapper(Entity, Entity)> detectFuncList[]
+const std::function<CollisionWrapper(EntityData::Geom, EntityData::Geom)> detectFuncList[]
 {
 	&Detect_CircleCircle,
 	&Detect_CirclePlane
 };
 
-const std::function<CollisionWrapper(Entity, Entity)> DetectFunc(int i)
+const std::function<CollisionWrapper(EntityData::Geom, EntityData::Geom)> DetectFunc(int i)
 {
 	return detectFuncList[i];
 }
@@ -99,7 +101,7 @@ const std::function<CollisionWrapper(Entity, Entity)> DetectFunc(int i)
 
 // Detect methods //////////////////////////////////
 
-const void Solve_CircleCircle(Entity a, Entity b)
+const void Solve_CircleCircle(CollisionWrapper c)
 {
 	float massA = a.GetMass();
 	float massB = b.GetMass();
@@ -114,18 +116,18 @@ const void Solve_CircleCircle(Entity a, Entity b)
 	b.geom.vel = (velB * (massB - massA) + velA * massA * 2) / totalMass * minRestitution;
 }
 
-const void Solve_CirclePlane(Entity circle, Entity plane)
+const void Solve_CirclePlane(CollisionWrapper c)
 {
 	
 }
 
-const std::function<void(Entity, Entity)> solveFuncList[]
+const std::function<void(CollisionWrapper)> solveFuncList[]
 {
 	&Solve_CircleCircle,
 	&Solve_CirclePlane
 };
 
-const std::function<void(Entity, Entity)> SolveFunc(int i)
+const std::function<void(CollisionWrapper)> SolveFunc(int i)
 {
 	return solveFuncList[i];
 }

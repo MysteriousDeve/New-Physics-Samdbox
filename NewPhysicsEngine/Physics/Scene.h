@@ -22,6 +22,7 @@ public:
 
 	Vector2 gravity = Vector2(0, -10);
 
+	// Count the existing entities available in scene
 	int entityCount = 0, geometryCount = 0;
 
 	// Constructor
@@ -31,13 +32,13 @@ public:
 
 	void AddEntity(EntityType type)
 	{
-		entities.push_back(Entity(type, { -1, -1, -1 }));
+		entities.push_back(Entity(type, entities.size(), { -1, -1, -1 }));
 		entityCount++;
 		return;
 	}
 	void AddGeometry(EntityType type)
 	{
-		Entity e = Entity(type, { (int)geometries.size(), -1, -1});
+		Entity e = Entity(type, entities.size(), { (int)geometries.size(), -1, -1 });
 		entities.push_back(e);
 		geometries.push_back(EntityData::Geom());
 		entityCount++;

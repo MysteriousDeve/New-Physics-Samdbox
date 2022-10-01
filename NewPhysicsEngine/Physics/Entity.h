@@ -31,6 +31,7 @@ struct Entity
 {
 	// 1. Geometries, 2. Non-geometries, 3. External Components
 	array<int, 3> ref;
+	int id;
 
 	EntityType entityType = EntityType::Nothing;
 
@@ -43,11 +44,12 @@ struct Entity
 	EntityData::EntityProp props;
 	EntityData::Geom geom;
 
-	Entity(EntityType type, array<int, 3> ref)
+	Entity(EntityType type, int id, array<int, 3> ref)
 	{
 		this->entityType = type;
 		this->isGeometry = (type >> 8) & 1;
 		this->ref = ref;
+		this->id = id;
 
 		SetArea();
 		SetMass();

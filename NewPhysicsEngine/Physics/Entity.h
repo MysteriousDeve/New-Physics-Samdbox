@@ -30,7 +30,7 @@ enum EntityType
 struct Entity
 {
 	// 1. Geometries, 2. Non-geometries, 3. External Components
-	int ref[3];
+	array<int, 3> ref;
 
 	EntityType entityType = EntityType::Nothing;
 
@@ -43,11 +43,11 @@ struct Entity
 	EntityData::EntityProp props;
 	EntityData::Geom geom;
 
-	Entity(Transform2D transform, EntityType type)
+	Entity(EntityType type, array<int, 3> ref)
 	{
-		this->transform = transform;
 		this->entityType = type;
 		this->isGeometry = (type >> 8) & 1;
+		this->ref = ref;
 
 		SetArea();
 		SetMass();
@@ -67,7 +67,7 @@ struct Entity
 
 	float BoxArea()
 	{
-		return transform.scale.InternalMultiply();
+		return props.box.size.InternalMultiply();
 	}
 
 	float PolygonArea()

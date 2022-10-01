@@ -16,9 +16,11 @@ using namespace std;
 class Scene
 {
 public:
-	vector<array<EntityData::Geom, 256>> geometries;
+	vector<EntityData::Geom> geometries;
+	vector<EntityData::EntityProp> entityProps;
+	vector<Entity> entities;
+
 	Vector2 gravity = Vector2(0, -10);
-	vector<array<Entity, 256>> entities;
 
 	int entityCount = 0, geometryCount = 0;
 
@@ -29,20 +31,19 @@ public:
 
 	void AddEntity(EntityType type)
 	{
-		if (entities.size() <= entityCount / 256)
-		{
-			entities.push_back(array<Entity, 256>());
-		}
+		entities.push_back(Entity(type, { -1, -1, -1 }));
 		entityCount++;
 	}
-
 	void AddGeometry(EntityType type)
 	{
-		
+		entities.push_back(Entity(type, { -1, -1, -1 }));
+		entityCount++;
+		geometryCount++;
 	}
+
 	EntityData::Geom* GetGeometryRef(int i)
 	{
-		return &geometries[i / 64][i % 64];
+		return &geometries[i];
 	}
 
 	// Apply gravity
@@ -50,7 +51,7 @@ public:
 	{
 		for (auto& x : geometries)
 		{
-			x.vel += gravity * dt * (x.isGeometry && (x.entityType & 1) < 3) * x.geom.gravityScale;
+			x.vel += gravity * dt * (x.density != INFINITY) * x.gravityScale;
 		}
 	}
 

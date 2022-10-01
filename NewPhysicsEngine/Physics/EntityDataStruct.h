@@ -17,6 +17,11 @@ namespace EntityData
 {
 	struct Geom
 	{
+		bool isExist = true;
+		operator bool() const
+		{
+			return isExist;
+		}
 		/*
 			Collision filter properties.
 			The first 30 bits is for collision layer,
@@ -55,7 +60,7 @@ namespace EntityData
 	};
 	struct Box
 	{
-
+		Vector2 size;
 	};
 	struct Poly
 	{

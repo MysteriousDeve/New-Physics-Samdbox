@@ -33,10 +33,13 @@ public:
 	{
 		entities.push_back(Entity(type, { -1, -1, -1 }));
 		entityCount++;
+		return;
 	}
 	void AddGeometry(EntityType type)
 	{
-		entities.push_back(Entity(type, { -1, -1, -1 }));
+		Entity e = Entity(type, { (int)geometries.size(), -1, -1});
+		entities.push_back(e);
+		geometries.push_back(EntityData::Geom());
 		entityCount++;
 		geometryCount++;
 	}
@@ -44,6 +47,11 @@ public:
 	EntityData::Geom* GetGeometryRef(int i)
 	{
 		return &geometries[i];
+	}
+
+	Entity* GetEntityRef(int i)
+	{
+		return &entities[i];
 	}
 
 	// Apply gravity

@@ -55,8 +55,10 @@ struct CollisionWrapper
 };
 
 // Narrow-phase methods //////////////////////////////////
+#define DETECT_PARAM(name0, name1) EntityData::Geom* name0, EntityData::Geom* name1
+#define DETECT_PARAM_TYPE DETECT_PARAM(,)
 
-const CollisionWrapper Detect_CircleCircle(Entity* a, Entity* b)
+const CollisionWrapper Detect_CircleCircle (DETECT_PARAM(c0, c1))
 {
 	return CollisionWrapper
 	(
@@ -68,7 +70,7 @@ const CollisionWrapper Detect_CircleCircle(Entity* a, Entity* b)
 	);
 }
 
-const CollisionWrapper Detect_CirclePlane(EntityData::Geom* circle, EntityData::Geom* plane)
+const CollisionWrapper Detect_CirclePlane(DETECT_PARAM(circle, plane))
 {
 	Vector2 planeNormal = plane->props.plane.normal;
 	Vector2 planePos = plane->COM;
@@ -86,13 +88,13 @@ const CollisionWrapper Detect_CirclePlane(EntityData::Geom* circle, EntityData::
 	);
 }
 
-const std::function<CollisionWrapper(EntityData::Geom, EntityData::Geom)> detectFuncList[]
+const std::function<CollisionWrapper(DETECT_PARAM_TYPE)> detectFuncList[]
 {
 	&Detect_CircleCircle,
 	&Detect_CirclePlane
 };
 
-const std::function<CollisionWrapper(EntityData::Geom, EntityData::Geom)> DetectFunc(int i)
+const std::function<CollisionWrapper(DETECT_PARAM_TYPE)> DetectFunc(int i)
 {
 	return detectFuncList[i];
 }

@@ -103,17 +103,6 @@ namespace EntityData
 			return area;
 		}
 
-		float SetArea()
-		{
-			int id = entityType % 256;
-			switch (id)
-			{
-			case 2:   return (area = PolygonArea());
-			case 1:   return (area = BoxArea());
-			default:  return (area = CircleArea());
-			}
-		}
-
 		float GetMass()
 		{
 			return mass;

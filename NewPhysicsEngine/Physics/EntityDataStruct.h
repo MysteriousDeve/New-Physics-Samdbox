@@ -39,6 +39,8 @@ namespace EntityData
 		Box box;
 		Poly polygon;
 		Plane plane;
+
+		GeometryProps(){}
 	};
 
 	struct Geom
@@ -48,6 +50,7 @@ namespace EntityData
 		{
 			return isExist;
 		}
+
 		/*
 			Collision filter properties.
 			The first 30 bits is for collision layer,
@@ -79,6 +82,47 @@ namespace EntityData
 		unsigned char visualizationMode = NULL;
 
 		GeometryProps props;
+
+		float CircleArea()
+		{
+			return pow(props.circle.radius, 2i32) * PI;
+		}
+
+		float BoxArea()
+		{
+			return props.box.size.InternalMultiply();
+		}
+
+		float PolygonArea()
+		{
+			return 1;
+		}
+
+		float GetArea()
+		{
+			return area;
+		}
+
+		float SetArea()
+		{
+			int id = entityType % 256;
+			switch (id)
+			{
+			case 2:   return (area = PolygonArea());
+			case 1:   return (area = BoxArea());
+			default:  return (area = CircleArea());
+			}
+		}
+
+		float GetMass()
+		{
+			return mass;
+		}
+
+		float SetMass()
+		{
+			return (mass = density * area);
+		}
 	};
 
 
@@ -138,11 +182,6 @@ namespace EntityData
 	// Union to save data and improve performance
 	union EntityProp
 	{
-		Circle circle;
-		Box box;
-		Poly polygon;
-		Plane plane;
-
 		Axle axle;
 		Spring spring;
 		Fixjoint fixjoint;
@@ -151,9 +190,6 @@ namespace EntityData
 		Thruster thruster;
 		Laser laser;
 
-		EntityProp()
-		{
-
-		}
+		EntityProp(){}
 	};
 }

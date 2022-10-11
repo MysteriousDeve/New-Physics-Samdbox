@@ -51,6 +51,9 @@ namespace EntityData
 			return isExist;
 		}
 
+		Transform2D transform;
+		AABB aabb;
+
 		/*
 			Collision filter properties.
 			The first 30 bits is for collision layer,
@@ -58,9 +61,6 @@ namespace EntityData
 			and 32th is for hetero-collision.
 		 */
 		unsigned int collideSet = 0x01 | WATER_COLLISION;
-
-		Vector2 COM;
-		Vector2 angle;
 
 		float gravityScale = 1;
 

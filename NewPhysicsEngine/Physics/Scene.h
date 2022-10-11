@@ -1,14 +1,7 @@
 #pragma once
 
-#include <iostream>
-#include <math.h>
-#include <vector>
-#include <set>
-#include <sstream>
-#include <string>
-#include "Entity.h"
-#include "Geometry.h"
-
+#include "../ProjectInclude.h"
+#include "../Renderer/Shader.h"
 #include "PhysicsSolverFunc.h"
 
 using namespace std;
@@ -66,7 +59,7 @@ public:
 
 	// Collisions detection
 	vector<CollisionTestInfo> SpatialSubdivisionTest();
-	vector<CollisionTestInfo> AABBCollisionsTest(vector<Geometry> geometries)
+	vector<CollisionTestInfo> AABBCollisionsTest(vector<EntityData::Geom> geometries)
 	{
 		int size = geometries.size();
 		vector<CollisionTestInfo> testList;
@@ -74,18 +67,24 @@ public:
 		{
 			for (int j = i + 1; j < size; j++)
 			{
-				bool cond = AABBPairTest(geometries[i], geometries[j]);
+				bool cond = AABBPairTestDebug(geometries[i], geometries[j]);
 				if (cond)
 				{
-					testList.push_back(CollisionTestInfo(i, j));
+					testList.push_back(CollisionTestInfo(&geometries[i], &geometries[j]));
 				}
 			}
 		}
 		return testList;
 	}
-	bool AABBPairTest(Geometry a, Geometry b)
+
+	bool AABBPairTest(EntityData::Geom a, EntityData::Geom b)
 	{
-		bool cond = AABB::DetectCollisionTest(a.boundingBox, b.boundingBox);
+		return AABB::DetectCollisionTest(a.aabb, b.aabb);
+	}
+
+	bool AABBPairTestDebug(Entity a, Entity b)
+	{
+		bool cond = AABB::DetectCollisionTest(a.geom.aabb, b.geom.aabb);
 		if (cond)
 		{
 			a.color = Color(0, 0.75, 1);
@@ -101,9 +100,7 @@ public:
 
 		for (auto &t: testList)
 		{
-			Geometry* a = &geometries[t.a];
-			Geometry* b = &geometries[t.b];
-			float depth = pow((a->transform.scale.x + b->transform.scale.x) / 2.0f, 2) - (a->transform.position - b->transform.position).lenSq();
+			float depth = pow((t.a->transform.scale.x + t.b->transform.scale.x) / 2.0f, 2) - (a->transform.position - b->transform.position).lenSq();
 			if (depth > 0)
 			{
 				a->color = Color(0, 1, 1);
@@ -183,6 +180,13 @@ public:
 			geometries[t.b].vel += massSolveB;
 		}
 	}
+	void PhysicsUpdate(float dt)
+	{
+		for (auto& t : geometries)
+		{
+			t.transform.position += t.vel * dt;
+		}
+	}
 
 	void Update(float dt)
 	{
@@ -190,13 +194,10 @@ public:
 		for (int i = 0; i < 3; i++)
 		{
 			ApplyGravity(dt);
-			lastStepCollisionInfo = DetectCollision();
-			SolveCollision(lastStepCollisionInfo, dt);
-			SolveOverlap(lastStepCollisionInfo, dt);
-			for (auto& t : geometries)
-			{
-				t.transform.position += t.vel * dt;
-			}
+			auto currentCollisionInfo = DetectCollision();
+			SolveCollision(currentCollisionInfo, dt);
+			SolveOverlap(currentCollisionInfo, dt);
+
 		}
 
 		// Bounding obj in a 2x2 box
@@ -216,14 +217,12 @@ public:
 
 	void RenderScene(int i, Shader* shader)
 	{
-		Geometry e = geometries[i];
+		Entity e = entities[i];
 		shader->SetUniformVec4("Color", e.color.r, e.color.g, e.color.b, e.color.a);
-		shader->SetUniformVec2("Position", e.transform.position.x, e.transform.position.y);
-		shader->SetUniformVec2("Size", e.transform.scale.x, e.transform.scale.y);
+		shader->SetUniformVec2("Position", e.geom.transform.position.x, e.geom.transform.position.y);
+		shader->SetUniformVec2("Size", e.bound.x, e.bound.y);
 	}
 };
-
-
 
 void Scene::InitializeSceneTesting(int nOfTestEntities)
 {
@@ -268,9 +267,9 @@ vector<CollisionTestInfo> Scene::SpatialSubdivisionTest()
 	}
 	cellSize *= 1;
 
-	vector<vector<vector<Geometry>>> cells;
-	vector<vector<Geometry>> subCells;
-	vector<Geometry> singleCell;
+	vector<vector<vector<EntityData::Geom>>> cells;
+	vector<vector<EntityData::Geom>> subCells;
+	vector<EntityData::Geom> singleCell;
 
 	subCells.resize((hy - ly) / cellSize + 2, singleCell);
 	cells.resize((hx - lx) / cellSize + 2, subCells);
@@ -293,7 +292,7 @@ vector<CollisionTestInfo> Scene::SpatialSubdivisionTest()
 		{
 			if (j < rowSize - 1)
 			{
-				vector<Geometry> c0 = cells[i][j], c1 = cells[i][j + 1];
+				vector<EntityData::Geom> c0 = cells[i][j], c1 = cells[i][j + 1];
 
 				for (int k = 0; k < c0.size(); k++)
 				{

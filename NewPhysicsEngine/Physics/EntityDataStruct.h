@@ -31,14 +31,14 @@ namespace EntityData
 	};
 	struct Plane
 	{
-		Vector2 normal;
+
 	};
 	union GeometryProps
 	{
 		Circle circle;
 		Box box;
 		Poly polygon;
-		Plane plane;
+		// Plane plane;
 
 		GeometryProps(){}
 	};

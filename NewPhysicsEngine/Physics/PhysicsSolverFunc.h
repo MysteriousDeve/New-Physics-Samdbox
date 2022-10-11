@@ -8,8 +8,8 @@
 
 struct CollisionTestInfo
 {
-	EntityData::Geom *a, *b;
-	CollisionTestInfo(EntityData::Geom* a, EntityData::Geom* b)
+	EntityData::Geom a, b;
+	CollisionTestInfo(EntityData::Geom a, EntityData::Geom b)
 	{
 		this->a = a;
 		this->b = b;
@@ -18,11 +18,11 @@ struct CollisionTestInfo
 struct CollisionInfo
 {
 	int collisionType;
-	EntityData::Geom *a, *b;
+	EntityData::Geom a, b;
 	Vector2 normal;
 	float depth;
 	bool isMovingTowardEachOther;
-	CollisionInfo(int collisionType, EntityData::Geom* a, EntityData::Geom* b, Vector2 normal, float depth, bool isMovingTowardEachOther)
+	CollisionInfo(int collisionType, EntityData::Geom a, EntityData::Geom b, Vector2 normal, float depth, bool isMovingTowardEachOther)
 	{
 		this->a = a;
 		this->b = b;
@@ -56,19 +56,18 @@ struct CollisionWrapper
 
 int GetGeometryCollisionId(EntityType t0, EntityType t1)
 {
-	int n0 = t0 & 1, n1 = t1 & 1;
-	if (n1 > n0) swap(n0, n1);
+	int n0 = t0 & 3, n1 = t1 & 3;
 	return n0 * 4 + n1;
 }
 
 // Narrow-phase methods //////////////////////////////////
-#define DETECT_PARAM(name0, name1, collisionId) EntityData::Geom* name0, EntityData::Geom* name1, int collisionId
+#define DETECT_PARAM(name0, name1, collisionId) EntityData::Geom name0, EntityData::Geom name1, int collisionId
 #define DETECT_PARAM_TYPE DETECT_PARAM(,,)
 
 const CollisionWrapper Detect_CircleCircle(DETECT_PARAM(c0, c1, collisionId))
 {
-	Vector2 distVec = c0->transform.position - c1->transform.position;
-	float dist = distVec.len() - c0->props.circle.radius + c1->props.circle.radius;
+	Vector2 distVec = c0.transform.position - c1.transform.position;
+	float dist = distVec.len() - c0.props.circle.radius + c1.props.circle.radius;
 	return CollisionWrapper
 	(
 		dist > 0,
@@ -78,12 +77,11 @@ const CollisionWrapper Detect_CircleCircle(DETECT_PARAM(c0, c1, collisionId))
 		)
 	);
 }
-
 const CollisionWrapper Detect_CirclePlane(DETECT_PARAM(circle, plane, collisionId))
 {
-	Vector2 planeNormal = plane->props.plane.normal;
-	Vector2 planePos = plane->transform.position;
-	Vector2 closestPointToPlane = circle->transform.position - planeNormal * circle->props.circle.radius;
+	Vector2 planeNormal = Vector2::angleToNormal(plane.transform.rotation);
+	Vector2 planePos = plane.transform.position;
+	Vector2 closestPointToPlane = circle.transform.position - planeNormal * circle.props.circle.radius;
 
 	float dist = (planeNormal.x * (planePos.y - planeNormal.y) - planeNormal.y * (planePos.x - planeNormal.x));
 
@@ -99,8 +97,28 @@ const CollisionWrapper Detect_CirclePlane(DETECT_PARAM(circle, plane, collisionI
 
 const std::function<CollisionWrapper(DETECT_PARAM_TYPE)> detectFuncList[]
 {
+	// Circle group
 	&Detect_CircleCircle,
-	&Detect_CirclePlane
+	&Detect_CircleBox,
+	&Detect_CirclePolygon,
+	&Detect_CirclePlane,
+
+	// Box group
+	&Detect_CircleBox
+	&Detect_BoxBox,
+	&Detect_BoxPolygon,
+	&Detect_BoxPlane
+
+	// Polygon group
+	&Detect_CirclePolygon,
+	&Detect_BoxPolygon,
+	&Detect_PolygonPolygon
+	&Detect_PolygonPlane,
+
+	// Plane group (only need 3 since 2 planes do not collide)
+	&Detect_CirclePlane,
+	&Detect_BoxPlane,
+	&Detect_Polygon_Plane
 };
 
 const std::function<CollisionWrapper(DETECT_PARAM_TYPE)> GetDetectFunc(int i)
@@ -116,17 +134,17 @@ const void Solve_CircleCircle(CollisionInfo c)
 {
 	auto geom0 = c.a, geom1 = c.b;
 
-	float massA = geom0->GetMass();
-	float massB = geom1->GetMass();
+	float massA = geom0.GetMass();
+	float massB = geom1.GetMass();
 
-	Vector2 velA = geom0->vel;
-	Vector2 velB = geom1->vel;
+	Vector2 velA = geom0.vel;
+	Vector2 velB = geom1.vel;
 
-	float minRestitution = std::min(geom0->restitution, geom1->restitution);
+	float minRestitution = std::min(geom0.restitution, geom1.restitution);
 	float totalMass = massA + massB;
 
-	geom0->vel = (velA * (massA - massB) + velB * massB * 2) / totalMass * minRestitution;
-	geom1->vel = (velB * (massB - massA) + velA * massA * 2) / totalMass * minRestitution;
+	geom0.vel = (velA * (massA - massB) + velB * massB * 2) / totalMass * minRestitution;
+	geom1.vel = (velB * (massB - massA) + velA * massA * 2) / totalMass * minRestitution;
 }
 
 const void Solve_CirclePlane(CollisionInfo c)

@@ -163,4 +163,9 @@ struct Vector2
 	{
 		return v1.x * v2.x + v1.y * v2.y;
 	}
+
+	static Vector2 angleToNormal(float angle)
+	{
+		return Vector2(cos(angle), sin(angle));
+	}
 };

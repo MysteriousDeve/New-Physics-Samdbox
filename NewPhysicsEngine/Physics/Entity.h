@@ -30,7 +30,7 @@ enum EntityType
 struct Entity
 {
 	// 1. Geometries, 2. Non-geometries, 3. External Components
-	array<int, 3> ref;
+	array<int, 3> entityRef;
 	int id;
 
 	EntityType entityType = EntityType::Nothing;
@@ -40,15 +40,18 @@ struct Entity
 	bool drawBorder = false;
 	bool isGeometry = false;
 
+	// Render bound
+	Vector2 bound;
+
 	// Entity-specific properties
 	EntityData::EntityProp props;
 	EntityData::Geom geom;
 
-	Entity(EntityType type, int id, array<int, 3> ref)
+	Entity(EntityType type, int id, array<int, 3> entityRef)
 	{
 		this->entityType = type;
 		this->isGeometry = (type >> 8) & 1;
-		this->ref = ref;
+		this->entityRef = entityRef;
 		this->id = id;
 
 		SetArea();
@@ -68,4 +71,3 @@ struct Entity
 
 	Entity() {}
 };
-

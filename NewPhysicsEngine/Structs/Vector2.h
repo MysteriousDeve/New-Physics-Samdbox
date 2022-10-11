@@ -157,7 +157,7 @@ struct Vector2
 	operator glm::vec2() const
 	{
 		return glm::vec2(x, y);
-	}
+	};
 	
 	static float Dot(Vector2 v1, Vector2 v2)
 	{

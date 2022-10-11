@@ -56,15 +56,16 @@ struct CollisionWrapper
 
 int GetGeometryCollisionId(EntityType t0, EntityType t1)
 {
-	if (t1 > t0) swap(t0, t1);
-	return 1;
+	int n0 = t0 & 1, n1 = t1 & 1;
+	if (n1 > n0) swap(n0, n1);
+	return n0 * 4 + n1;
 }
 
 // Narrow-phase methods //////////////////////////////////
-#define DETECT_PARAM(name0, name1) EntityData::Geom* name0, EntityData::Geom* name1
-#define DETECT_PARAM_TYPE DETECT_PARAM(,)
+#define DETECT_PARAM(name0, name1, collisionId) EntityData::Geom* name0, EntityData::Geom* name1, int collisionId
+#define DETECT_PARAM_TYPE DETECT_PARAM(,,)
 
-const CollisionWrapper Detect_CircleCircle (DETECT_PARAM(c0, c1))
+const CollisionWrapper Detect_CircleCircle(DETECT_PARAM(c0, c1, collisionId))
 {
 	Vector2 distVec = c0->transform.position - c1->transform.position;
 	float dist = distVec.len() - c0->props.circle.radius + c1->props.circle.radius;
@@ -73,12 +74,12 @@ const CollisionWrapper Detect_CircleCircle (DETECT_PARAM(c0, c1))
 		dist > 0,
 		CollisionInfo
 		(
-			0, c0, c1, distVec.Normalize(), dist, false // idk
+			collisionId, c0, c1, distVec.Normalize(), dist, false // idk
 		)
 	);
 }
 
-const CollisionWrapper Detect_CirclePlane(DETECT_PARAM(circle, plane))
+const CollisionWrapper Detect_CirclePlane(DETECT_PARAM(circle, plane, collisionId))
 {
 	Vector2 planeNormal = plane->props.plane.normal;
 	Vector2 planePos = plane->transform.position;
@@ -91,7 +92,7 @@ const CollisionWrapper Detect_CirclePlane(DETECT_PARAM(circle, plane))
 		dist > 0,
 		CollisionInfo
 		(
-			0, circle, plane, planeNormal, dist, false // idk
+			collisionId, circle, plane, planeNormal, dist, false // idk
 		)
 	);
 }

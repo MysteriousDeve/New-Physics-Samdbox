@@ -118,7 +118,7 @@ const std::function<CollisionWrapper(DETECT_PARAM_TYPE)> detectFuncList[]
 	// Plane group (only need 3 since 2 planes do not collide)
 	&Detect_CirclePlane,
 	&Detect_BoxPlane,
-	&Detect_Polygon_Plane
+	&Detect_PolygonPlane
 };
 
 const std::function<CollisionWrapper(DETECT_PARAM_TYPE)> GetDetectFunc(int i)

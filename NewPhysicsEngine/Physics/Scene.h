@@ -70,7 +70,7 @@ public:
 				bool cond = AABBPairTestDebug(geometries[i], geometries[j]);
 				if (cond)
 				{
-					testList.push_back(CollisionTestInfo(&geometries[i], &geometries[j]));
+					testList.push_back(CollisionTestInfo(geometries[i], geometries[j]));
 				}
 			}
 		}
@@ -82,14 +82,9 @@ public:
 		return AABB::DetectCollisionTest(a.aabb, b.aabb);
 	}
 
-	bool AABBPairTestDebug(Entity a, Entity b)
+	bool AABBPairTestDebug(EntityData::Geom a, EntityData::Geom b)
 	{
-		bool cond = AABB::DetectCollisionTest(a.geom.aabb, b.geom.aabb);
-		if (cond)
-		{
-			a.color = Color(0, 0.75, 1);
-			b.color = Color(0, 0.75, 1);
-		}
+		bool cond = AABB::DetectCollisionTest(a.aabb, b.aabb);
 		return cond;
 	}
 

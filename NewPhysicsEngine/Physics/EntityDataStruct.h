@@ -2,8 +2,8 @@
 
 #include "../ProjectInclude.h"
 
-constexpr unsigned int WATER_COLLISION = 1 << 30;
-constexpr unsigned int HETERO_COLLISION = 1 << 31;
+constexpr unsigned p_int WATER_COLLISION = 1 << 30;
+constexpr unsigned p_int HETERO_COLLISION = 1 << 31;
 
 enum VisualizationEnum
 {
@@ -17,7 +17,7 @@ namespace EntityData
 {
 	struct Circle
 	{
-		float radius;
+		p_int radius;
 		bool drawAngleIndicator;
 	};
 	struct Box
@@ -60,55 +60,55 @@ namespace EntityData
 			the 31th is for water collision,
 			and 32th is for hetero-collision.
 		 */
-		unsigned int collideSet = 0x01 | WATER_COLLISION;
+		unsigned p_int collideSet = 0x01 | WATER_COLLISION;
 
-		float gravityScale = 1;
+		p_dec gravityScale = 1;
 
 		Vector2 vel;
-		float angvel;
+		p_dec angvel;
 
-		float density;
+		p_dec density;
 
-		float area = 1;
-		float mass = 1;
+		p_dec area = 1;
+		p_dec mass = 1;
 
-		float friction;
-		float restitution;
+		p_dec friction;
+		p_dec restitution;
 
-		float reflectiveness;
-		float refractiveIndex;
-		float adhesion;
+		p_dec reflectiveness;
+		p_dec refractiveIndex;
+		p_dec adhesion;
 		
 		unsigned char visualizationMode = NULL;
 
 		GeometryProps props;
 
-		float CircleArea()
+		p_dec CircleArea()
 		{
 			return pow(props.circle.radius, 2i32) * PI;
 		}
 
-		float BoxArea()
+		p_dec BoxArea()
 		{
-			return props.box.size.InternalMultiply();
+			return props.box.size.internalMultiply();
 		}
 
-		float PolygonArea()
+		p_dec PolygonArea()
 		{
 			return 1;
 		}
 
-		float GetArea()
+		p_dec GetArea()
 		{
 			return area;
 		}
 
-		float GetMass()
+		p_dec GetMass()
 		{
 			return mass;
 		}
 
-		float SetMass()
+		p_dec SetMass()
 		{
 			return (mass = density * area);
 		}
@@ -118,25 +118,25 @@ namespace EntityData
 	// Constraint
 	struct Constraint
 	{
-		int geom0, geom1;
+		p_int geom0, geom1;
 		Vector2 geom0pos, geom1pos;
 	};
 	struct Axle : Constraint
 	{
 		// Motor
 		bool motorEnabled;
-		float motorSpeed; // radian per second
-		float motorTorque;
+		p_dec motorSpeed; // radian per second
+		p_dec motorTorque;
 	
 		// Bend
 		bool bendEnabled;
-		float bendTarget;
-		float bendConstant;
+		p_dec bendTarget;
+		p_dec bendConstant;
 	};
 	struct Spring : Constraint
 	{
-		float springConstant;
-		float targetLength;
+		p_dec springConstant;
+		p_dec targetLength;
 	};
 	struct Fixjoint : Constraint
 	{
@@ -150,20 +150,20 @@ namespace EntityData
 	};
 	struct Tracer
 	{
-		float fadeTime;
+		p_dec fadeTime;
 		const bool independent = false;
 	};
 	struct Thruster
 	{
-		float force;
-		float rotation;
+		p_dec force;
+		p_dec rotation;
 		const bool independent = false;
 	};
 	struct Laser
 	{
-		float fadeDist;
-		float laserVelocity;
-		float rotation;
+		p_dec fadeDist;
+		p_dec laserVelocity;
+		p_dec rotation;
 		bool independent;
 		bool followGeometry = true;
 	};

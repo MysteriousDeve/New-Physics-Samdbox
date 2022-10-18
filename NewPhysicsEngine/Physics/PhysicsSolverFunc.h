@@ -57,10 +57,9 @@ struct CollisionWrapper
 	}
 };
 
-int GetGeometryCollisionId(EntityType t0, EntityType t1)
+int GetGeometryCollisionId(GeometryType t0, GeometryType t1)
 {
-	int n0 = t0 & 3, n1 = t1 & 3;
-	return n0 * 4 + n1;
+	return t0 * 4 + t1;
 }
 
 // Narrow-phase methods //////////////////////////////////
@@ -73,10 +72,11 @@ const CollisionWrapper Detect_CircleCircle(DETECT_PARAM(c0, c1))
 	float dist = distVec.len() - c0.props.circle.radius + c1.props.circle.radius;
 	return CollisionWrapper
 	(
+		0,
 		dist > 0,
 		CollisionInfo
 		(
-			collisionId, c0, c1, distVec.Normalize(), dist, false // idk
+			c0, c1, distVec.Normalize(), dist, false // idk
 		)
 	);
 }
@@ -208,6 +208,11 @@ const std::function<CollisionWrapper(DETECT_PARAM_TYPE)> GetDetectFunc(int i)
 	return detectFuncList[i];
 }
 
+const void Detect(EntityData::Geom g0, EntityData::Geom g1)
+{
+	int type = GetGeometryCollisionId(g0.type, g1.type);
+	GetDetectFunc(type)(g0, g1);
+}
 
 
 // Solve methods //////////////////////////////////
@@ -293,7 +298,10 @@ const std::function<void(CollisionInfo)> GetSolveFunc(int i)
 {
 	return solveFuncList[i];
 }
-const void Solve(CollisionInfo info)
+const void Solve(CollisionWrapper col)
 {
-	
+	if (col.isCollide)
+	{
+
+	}
 }

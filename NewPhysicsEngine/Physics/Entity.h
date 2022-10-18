@@ -8,23 +8,16 @@
 
 enum EntityType
 {
-	Nothing    = 0,
+	Nothing       = 0,
 
 	// geometries
-	Circle     = 0x0100,
-	Box        = 0x0101,
-	Poly       = 0x0102,
-	Plane      = 0x0103,
+	Geometry      = 1,
 
 	// constraint
-	Axle       = 0x0200,
-	Spring     = 0x0201,
-	Fixjoint   = 0x0202,
+	Constraint    = 2,
 
 	// non-constraint
-	Tracer     = 0x0303,
-	Thruster   = 0x0304,
-	Laser      = 0x0305,
+	Nonconstraint = 3
 };
 
 struct Entity
@@ -60,7 +53,7 @@ struct Entity
 
 	float SetArea()
 	{
-		int id = entityType % 256;
+		int id = entityType;
 		switch (id)
 		{
 		case 2:   return geom.area = geom.PolygonArea();

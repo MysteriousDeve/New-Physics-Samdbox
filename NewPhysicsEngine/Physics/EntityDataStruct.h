@@ -2,8 +2,8 @@
 
 #include "../ProjectInclude.h"
 
-constexpr unsigned p_int WATER_COLLISION = 1 << 30;
-constexpr unsigned p_int HETERO_COLLISION = 1 << 31;
+constexpr p_int WATER_COLLISION = 1 << 30;
+constexpr p_int HETERO_COLLISION = 1 << 31;
 
 enum VisualizationEnum
 {
@@ -11,6 +11,28 @@ enum VisualizationEnum
 	MOMENTUM             = 2u,
 	VELOCITY             = 4u,
 	ANGULAR_VELOCITY     = 8u,
+};
+
+enum GeometryType
+{
+	Circle,
+	Box,
+	Poly,
+	Plane
+};
+
+enum ConstraintType
+{
+	Axle,
+	Spring,
+	Fixjoint
+};
+
+enum NonconstraintType
+{
+	Tracer,
+	Thruster,
+	Laser
 };
 
 namespace EntityData
@@ -51,6 +73,8 @@ namespace EntityData
 			return isExist;
 		}
 
+		GeometryType type;
+
 		Transform2D transform;
 		AABB aabb;
 
@@ -60,7 +84,7 @@ namespace EntityData
 			the 31th is for water collision,
 			and 32th is for hetero-collision.
 		 */
-		unsigned p_int collideSet = 0x01 | WATER_COLLISION;
+		p_int collideSet = 0x01 | WATER_COLLISION;
 
 		p_dec gravityScale = 1;
 
@@ -90,7 +114,7 @@ namespace EntityData
 
 		p_dec BoxArea()
 		{
-			return props.box.size.internalMultiply();
+			return props.box.size.InternalMultiply();
 		}
 
 		p_dec PolygonArea()
@@ -113,7 +137,6 @@ namespace EntityData
 			return (mass = density * area);
 		}
 	};
-
 
 	// Constraint
 	struct Constraint

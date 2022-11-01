@@ -155,7 +155,26 @@ const void Solve_CirclePlane(CollisionInfo c)
 const std::function<void(CollisionInfo)> solveFuncList[]
 {
 	&Solve_CircleCircle,
-	&Solve_CirclePlane
+	&Solve_CircleBox,
+	&Solve_CirclePolygon,
+	&Solve_CirclePlane,
+
+	// Box group
+	&Solve_CircleBox
+	&Solve_BoxBox,
+	&Solve_BoxPolygon,
+	&Solve_BoxPlane
+
+	// Polygon group
+	&Solve_CirclePolygon,
+	&Solve_BoxPolygon,
+	&Solve_PolygonPolygon
+	&Solve_PolygonPlane,
+
+	// Plane group (only need 3 since 2 planes do not collide)
+	&Solve_CirclePlane,
+	&Solve_BoxPlane,
+	&Solve_PolygonPlane
 };
 
 const std::function<void(CollisionInfo)> GetSolveFunc(int i)

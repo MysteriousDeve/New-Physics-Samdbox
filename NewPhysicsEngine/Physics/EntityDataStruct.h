@@ -60,7 +60,7 @@ namespace EntityData
 		Circle circle;
 		Box box;
 		Poly polygon;
-		// Plane plane;
+		Plane plane;
 
 		GeometryProps(){}
 	};

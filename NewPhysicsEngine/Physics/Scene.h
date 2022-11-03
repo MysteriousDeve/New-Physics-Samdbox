@@ -18,10 +18,10 @@ public:
 	// Count the existing entities available in scene
 	int entityCount = 0, geometryCount = 0;
 
-	// Constructor
+	// Default constructor
 	Scene() {}
 
-	void InitializeSceneTesting(int nOfTestEntities);
+	p_dec simUpdateDelta = 1 / 60.0;
 
 	void AddEntity(EntityType type)
 	{
@@ -29,13 +29,40 @@ public:
 		entityCount++;
 		return;
 	}
-	void AddGeometry(EntityType type)
+	Entity *AddGeometry(GeometryType type)
 	{
-		Entity e = Entity(type, entities.size(), { (int)geometries.size(), -1, -1 });
+		Entity e = Entity(EntityType::Geometry, entities.size(), { (int)geometries.size(), -1, -1 });
 		entities.push_back(e);
 		geometries.push_back(EntityData::Geom());
 		entityCount++;
 		geometryCount++;
+
+		return &entities[entityCount - 1];
+	}
+	
+	void InitializeSceneTesting(int nOfTestEntities)
+	{
+		for (int i = 0; i < nOfTestEntities; i++)
+		{
+			float randRadius = (rand()) / float(RAND_MAX) / 10.0 + 0.025;
+
+			AddGeometry(GeometryType::Circle);
+
+			Geometry g(
+				Transform2D(
+					Vector2((rand()) / float(RAND_MAX) - 0.5f, (rand()) / float(RAND_MAX) - 0.5f) / 2.0,
+					Vector2(randRadius, randRadius),
+					0
+				),
+				EntityType::Circle
+			);
+			g.vel = Vector2(
+				(rand()) / float(RAND_MAX) - 0.5f,
+				(rand()) / float(RAND_MAX) - 0.5f
+			) * 16;
+			g.restitution = 0.25;
+			geometries.push_back(g);
+		}
 	}
 
 	EntityData::Geom* GetGeometryRef(int i)
@@ -130,31 +157,15 @@ public:
 		//);
 		
 	}
-	
-	// Collisions solver
-	void SolveCollision(vector<CollisionInfo> collisionList, float dt)
+
+	void SolveCollision(vector<CollisionWrapper> info)
 	{
-		for (auto& t : collisionList)
+		for (auto &x : info)
 		{
-			if (t.isMovingTowardEachOther)
-			{
-				Geometry geomA = geometries[t.a];
-				Geometry geomB = geometries[t.b];
-
-				float massA = geomA.GetMass();
-				float massB = geomB.GetMass();
-
-				Vector2 velA = geomA.GetVelocity();
-				Vector2 velB = geomB.GetVelocity();
-
-				float minRestitution = std::min(geomA.restitution, geomB.restitution);
-				float totalMass = massA + massB;
-
-				geometries[t.a].vel = (velA * (massA - massB) + velB * massB * 2) / totalMass * minRestitution;
-				geometries[t.b].vel = (velB * (massB - massA) + velA * massA * 2) / totalMass * minRestitution;
-			}
+			Solve(info, simUpdateDelta);
 		}
 	}
+
 	void SolveOverlap(vector<CollisionInfo> collisionList, float dt)
 	{
 		for (auto& t : collisionList)
@@ -182,12 +193,12 @@ public:
 		}
 	}
 
-	void Update(float dt)
+	void Update()
 	{
 		dt /= 3;
 		for (int i = 0; i < 3; i++)
 		{
-			ApplyGravity(dt);
+			ApplyGravity();
 			auto currentCollisionInfo = DetectCollision();
 			SolveCollision(currentCollisionInfo, dt);
 			SolveOverlap(currentCollisionInfo, dt);
@@ -216,30 +227,6 @@ public:
 		shader->SetUniformVec2("Size", e.bound.x, e.bound.y);
 	}
 };
-
-void Scene::InitializeSceneTesting(int nOfTestEntities)
-{
-	for (int i = 0; i < nOfTestEntities; i++)
-	{
-		float randRadius = (rand()) / float(RAND_MAX) / 10.0 + 0.025;
-
-		Geometry g(
-			Transform2D(
-				Vector2((rand()) / float(RAND_MAX) - 0.5f, (rand()) / float(RAND_MAX) - 0.5f) / 2.0,
-				Vector2(randRadius, randRadius),
-				0
-			),
-			EntityType::Circle
-		);
-		g.color = Color(0, 0.5, 1);
-		g.vel = Vector2(
-			(rand()) / float(RAND_MAX) - 0.5f,
-			(rand()) / float(RAND_MAX) - 0.5f
-		) * 16;
-		g.restitution = 0.25;
-		geometries.push_back(g);
-	}
-}
 
 vector<CollisionTestInfo> Scene::SpatialSubdivisionTest()
 {

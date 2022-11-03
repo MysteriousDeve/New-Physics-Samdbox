@@ -230,10 +230,10 @@ const void Detect(EntityData::Geom g0, EntityData::Geom g1)
 
 // Solve methods //////////////////////////////////
 #define SOLVE_RETURN void
-#define SOLVE_PARAM(c) CollisionInfo c
-#define SOLVE_FUNC_DEF SOLVE_RETURN(SOLVE_PARAM())
+#define SOLVE_PARAM CollisionInfo c, p_dec dt
+#define SOLVE_FUNC_DEF SOLVE_RETURN(SOLVE_PARAM)
 
-const SOLVE_RETURN Solve_CircleCircle(SOLVE_PARAM(c))
+const SOLVE_RETURN Solve_CircleCircle(SOLVE_PARAM)
 {
 	auto geom0 = c.a, geom1 = c.b;
 
@@ -249,37 +249,37 @@ const SOLVE_RETURN Solve_CircleCircle(SOLVE_PARAM(c))
 	geom0.vel = (velA * (massA - massB) + velB * massB * 2) / totalMass * minRestitution;
 	geom1.vel = (velB * (massB - massA) + velA * massA * 2) / totalMass * minRestitution;
 }
-/* Not implemented */ const SOLVE_RETURN Solve_CircleBox(SOLVE_PARAM(c))
+/* Not implemented */ const SOLVE_RETURN Solve_CircleBox(SOLVE_PARAM)
 {
 	return;
 }
-/* Not implemented */ const SOLVE_RETURN Solve_CirclePolygon(SOLVE_PARAM(c))
+/* Not implemented */ const SOLVE_RETURN Solve_CirclePolygon(SOLVE_PARAM)
 {
 	return;
 }
-const SOLVE_RETURN Solve_CirclePlane(SOLVE_PARAM(c))
+const SOLVE_RETURN Solve_CirclePlane(SOLVE_PARAM)
 {
 	
 }
 
-/* Not implemented */ const SOLVE_RETURN Solve_BoxBox(SOLVE_PARAM(c))
+/* Not implemented */ const SOLVE_RETURN Solve_BoxBox(SOLVE_PARAM)
 {
 	return;
 }
-/* Not implemented */ const SOLVE_RETURN Solve_BoxPolygon(SOLVE_PARAM(c))
+/* Not implemented */ const SOLVE_RETURN Solve_BoxPolygon(SOLVE_PARAM)
 {
 	return;
 }
-/* Not implemented */ const SOLVE_RETURN Solve_BoxPlane(SOLVE_PARAM(c))
+/* Not implemented */ const SOLVE_RETURN Solve_BoxPlane(SOLVE_PARAM)
 {
 	return;
 }
 
-/* Not implemented */ const SOLVE_RETURN Solve_PolygonPolygon(SOLVE_PARAM(c))
+/* Not implemented */ const SOLVE_RETURN Solve_PolygonPolygon(SOLVE_PARAM)
 {
 	return;
 }
-/* Not implemented */ const SOLVE_RETURN Solve_PolygonPlane(SOLVE_PARAM(c))
+/* Not implemented */ const SOLVE_RETURN Solve_PolygonPlane(SOLVE_PARAM)
 {
 	return;
 }
@@ -314,10 +314,10 @@ const std::function<SOLVE_FUNC_DEF> GetSolveFunc(int i)
 {
 	return solveFuncList[i];
 }
-const SOLVE_RETURN Solve(CollisionWrapper col)
+const SOLVE_RETURN Solve(CollisionWrapper col, p_dec dt)
 {
 	if (col)
 	{
-		GetSolveFunc(col.collisionType)(col.info);
+		GetSolveFunc(col.collisionType)(col.info, dt);
 	}
 }

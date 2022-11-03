@@ -98,7 +98,7 @@ struct Vector2
 
 	void Clear()
 	{
-		*this = Vector2();
+		x = y = 0;
 	}
 
 	// The length of the vector
@@ -114,7 +114,7 @@ struct Vector2
 
 	Vector2 Normalize()
 	{
-		p_dec l = len();
+		p_dec l = lenSq();
 		return( 
 			*this = (l != 0 ? 
 				*this / l : 
@@ -122,8 +122,24 @@ struct Vector2
 		);
 	}
 
+	Vector2 Normalized()
+	{
+		p_dec l = lenSq();
+		return
+			(
+				l != 0 ? 
+				*this / l :
+				Vector2(1, 0)
+			);
+	}
+
 	// The angle of the vector in radian
 	p_dec GetAngle()
+	{
+		return atan2(y, x);
+	}
+
+	p_dec GetAngleDeg()
 	{
 		return atan2(y, x);
 	}

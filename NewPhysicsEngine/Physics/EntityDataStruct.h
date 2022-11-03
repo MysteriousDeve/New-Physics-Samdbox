@@ -103,7 +103,7 @@ namespace EntityData
 		p_dec refractiveIndex;
 		p_dec adhesion;
 		
-		unsigned char visualizationMode = NULL;
+		p_int visualizationMode = NULL;
 
 		GeometryProps props;
 
@@ -136,6 +136,8 @@ namespace EntityData
 		{
 			return (mass = density * area);
 		}
+
+
 	};
 
 	// Constraint

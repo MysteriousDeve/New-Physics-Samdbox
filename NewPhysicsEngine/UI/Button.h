@@ -11,7 +11,7 @@ private:
 	void (*onIdle)();
 	void (*update)();
 public:
-	Transform2D transform;
+	Transform2DUI transform;
 	Color color;
 
 	Button(Vector2 position, Vector2 size, void(*onHover)(), void(*onClick)(), Color color = Color(0.2, 0.2, 0.2))

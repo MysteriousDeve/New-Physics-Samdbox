@@ -72,9 +72,6 @@
     <ClInclude Include="UI\InteractionHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Physics\Geometry.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="UI\Button.h">
       <Filter>Header Files</Filter>
     </ClInclude>

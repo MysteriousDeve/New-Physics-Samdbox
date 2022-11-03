@@ -52,11 +52,13 @@ public:
 
 	void OnClick()
 	{
+		color = Color(0.8, 0.8, 0.8);
 		(*onClick)();
 	}
 
 	void OnRelease()
 	{
+		color = Color(0.2, 0.2, 0.2);
 		(*onRelease)();
 	}
 };

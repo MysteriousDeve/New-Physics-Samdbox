@@ -121,7 +121,6 @@ public:
 	{
 		for (int i = 0; i < geometries.size(); i++)
 		{
-			geometries[i].color = Color(0, 0.5, 1);
 			geometries[i].CalculateAABB();
 		}
 
@@ -192,7 +191,6 @@ public:
 			auto currentCollisionInfo = DetectCollision();
 			SolveCollision(currentCollisionInfo, dt);
 			SolveOverlap(currentCollisionInfo, dt);
-
 		}
 
 		// Bounding obj in a 2x2 box

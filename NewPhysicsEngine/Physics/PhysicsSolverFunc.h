@@ -61,6 +61,11 @@ int GetGeometryCollisionId(GeometryType t0, GeometryType t1)
 {
 	return t0 * 4 + t1;
 }
+constexpr int GetGeometryCollisionIdConst(GeometryType t0, GeometryType t1)
+{
+	return t0 * 4 + t1;
+}
+
 
 // Narrow-phase methods //////////////////////////////////
 #define DETECT_PARAM(name0, name1) EntityData::Geom name0, EntityData::Geom name1
@@ -84,6 +89,7 @@ const CollisionWrapper Detect_CircleCircle(DETECT_PARAM(c0, c1))
 {
 	return CollisionWrapper
 	(
+		GetGeometryCollisionIdConst(GeometryType::Circle, GeometryType::Box),
 		false,
 		CollisionInfo
 		(
@@ -91,18 +97,19 @@ const CollisionWrapper Detect_CircleCircle(DETECT_PARAM(c0, c1))
 		)
 	);
 } 
-/* Not implemented */ const CollisionWrapper Detect_CirclePolygon(DETECT_PARAM(circle, polygon))
+/* Not implemented */ const CollisionWrapper Detect_CirclePolygon(DETECT_PARAM(circle, poly))
 {
 	return CollisionWrapper
 	(
+		GetGeometryCollisionIdConst(GeometryType::Circle, GeometryType::Poly),
 		false,
 		CollisionInfo
 		(
-			collisionId, c0, c1, 0, 0, false
+			circle, poly, 0, 0, false
 		)
 	);
 }
-const CollisionWrapper Detect_CirclePlane(DETECT_PARAM(circle, plane, collisionId))
+const CollisionWrapper Detect_CirclePlane(DETECT_PARAM(circle, plane))
 {
 	Vector2 planeNormal = Vector2::angleToNormal(plane.transform.rotation);
 	Vector2 planePos = plane.transform.position;
@@ -112,10 +119,11 @@ const CollisionWrapper Detect_CirclePlane(DETECT_PARAM(circle, plane, collisionI
 
 	return CollisionWrapper
 	(
+		GetGeometryCollisionIdConst(GeometryType::Circle, GeometryType::Plane),
 		dist > 0,
 		CollisionInfo
 		(
-			collisionId, circle, plane, planeNormal, dist, false // idk
+			circle, plane, planeNormal, dist, false // idk
 		)
 	);
 }
@@ -124,10 +132,11 @@ const CollisionWrapper Detect_CirclePlane(DETECT_PARAM(circle, plane, collisionI
 {
 	return CollisionWrapper
 	(
+		GetGeometryCollisionIdConst(GeometryType::Box, GeometryType::Box),
 		false,
 		CollisionInfo
 		(
-			collisionId, c0, c1, 0, 0, false
+			c0, c1, 0, 0, false
 		)
 	);
 }
@@ -135,10 +144,11 @@ const CollisionWrapper Detect_CirclePlane(DETECT_PARAM(circle, plane, collisionI
 {
 	return CollisionWrapper
 	(
+		GetGeometryCollisionIdConst(GeometryType::Box, GeometryType::Poly),
 		false,
 		CollisionInfo
 		(
-			collisionId, c0, c1, 0, 0, false
+			box, poly, 0, 0, false
 		)
 	);
 }
@@ -146,10 +156,11 @@ const CollisionWrapper Detect_CirclePlane(DETECT_PARAM(circle, plane, collisionI
 {
 	return CollisionWrapper
 	(
+		GetGeometryCollisionIdConst(GeometryType::Box, GeometryType::Plane),
 		false,
 		CollisionInfo
 		(
-			collisionId, c0, c1, 0, 0, false
+			box, plane, 0, 0, false
 		)
 	);
 }
@@ -158,10 +169,11 @@ const CollisionWrapper Detect_CirclePlane(DETECT_PARAM(circle, plane, collisionI
 {
 	return CollisionWrapper
 	(
+		GetGeometryCollisionIdConst(GeometryType::Poly, GeometryType::Poly),
 		false,
 		CollisionInfo
 		(
-			collisionId, c0, c1, 0, 0, false
+			c0, c1, 0, 0, false
 		)
 	);
 }
@@ -169,10 +181,11 @@ const CollisionWrapper Detect_CirclePlane(DETECT_PARAM(circle, plane, collisionI
 {
 	return CollisionWrapper
 	(
+		GetGeometryCollisionIdConst(GeometryType::Poly, GeometryType::Plane),
 		false,
 		CollisionInfo
 		(
-			collisionId, c0, c1, 0, 0, false
+			poly, plane, 0, 0, false
 		)
 	);
 }
@@ -216,8 +229,11 @@ const void Detect(EntityData::Geom g0, EntityData::Geom g1)
 
 
 // Solve methods //////////////////////////////////
+#define SOLVE_RETURN void
+#define SOLVE_PARAM(c) CollisionInfo c
+#define SOLVE_FUNC_DEF SOLVE_RETURN(SOLVE_PARAM())
 
-const void Solve_CircleCircle(CollisionInfo c)
+const SOLVE_RETURN Solve_CircleCircle(SOLVE_PARAM(c))
 {
 	auto geom0 = c.a, geom1 = c.b;
 
@@ -233,42 +249,42 @@ const void Solve_CircleCircle(CollisionInfo c)
 	geom0.vel = (velA * (massA - massB) + velB * massB * 2) / totalMass * minRestitution;
 	geom1.vel = (velB * (massB - massA) + velA * massA * 2) / totalMass * minRestitution;
 }
-/* Not implemented */ const void Solve_CircleBox(CollisionInfo c)
+/* Not implemented */ const SOLVE_RETURN Solve_CircleBox(SOLVE_PARAM(c))
 {
 	return;
 }
-/* Not implemented */ const void Solve_CirclePolygon(CollisionInfo c)
+/* Not implemented */ const SOLVE_RETURN Solve_CirclePolygon(SOLVE_PARAM(c))
 {
 	return;
 }
-const void Solve_CirclePlane(CollisionInfo c)
+const SOLVE_RETURN Solve_CirclePlane(SOLVE_PARAM(c))
 {
 	
 }
 
-/* Not implemented */ const void Solve_BoxBox(CollisionInfo c)
+/* Not implemented */ const SOLVE_RETURN Solve_BoxBox(SOLVE_PARAM(c))
 {
 	return;
 }
-/* Not implemented */ const void Solve_BoxPolygon(CollisionInfo c)
+/* Not implemented */ const SOLVE_RETURN Solve_BoxPolygon(SOLVE_PARAM(c))
 {
 	return;
 }
-/* Not implemented */ const void Solve_BoxPlane(CollisionInfo c)
-{
-	return;
-}
-
-/* Not implemented */ const void Solve_PolygonPolygon(CollisionInfo c)
-{
-	return;
-}
-/* Not implemented */ const void Solve_PolygonPlane(CollisionInfo c)
+/* Not implemented */ const SOLVE_RETURN Solve_BoxPlane(SOLVE_PARAM(c))
 {
 	return;
 }
 
-const std::function<void(CollisionInfo)> solveFuncList[]
+/* Not implemented */ const SOLVE_RETURN Solve_PolygonPolygon(SOLVE_PARAM(c))
+{
+	return;
+}
+/* Not implemented */ const SOLVE_RETURN Solve_PolygonPlane(SOLVE_PARAM(c))
+{
+	return;
+}
+
+const std::function<SOLVE_FUNC_DEF> solveFuncList[]
 {
 	// Circle group
 	&Solve_CircleCircle,
@@ -294,14 +310,14 @@ const std::function<void(CollisionInfo)> solveFuncList[]
 	&Solve_PolygonPlane,
 };
 
-const std::function<void(CollisionInfo)> GetSolveFunc(int i)
+const std::function<SOLVE_FUNC_DEF> GetSolveFunc(int i)
 {
 	return solveFuncList[i];
 }
-const void Solve(CollisionWrapper col)
+const SOLVE_RETURN Solve(CollisionWrapper col)
 {
-	if (col.isCollide)
+	if (col)
 	{
-
+		GetSolveFunc(col.collisionType)(col.info);
 	}
 }

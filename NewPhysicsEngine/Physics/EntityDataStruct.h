@@ -111,17 +111,25 @@ namespace EntityData
 		{
 			return pow(props.circle.radius, 2i32) * PI;
 		}
-
 		p_dec BoxArea()
 		{
 			return props.box.size.InternalMultiply();
 		}
-
 		p_dec PolygonArea()
 		{
 			return 1;
 		}
 
+		p_dec SetArea()
+		{
+			switch (type)
+			{
+			case GeometryType::Poly:    return area = PolygonArea();
+			case GeometryType::Box:     return area = BoxArea();
+			case GeometryType::Circle:  return area = CircleArea();
+			default: return area = INFINITY;
+			}
+		}
 		p_dec GetArea()
 		{
 			return area;
@@ -131,13 +139,15 @@ namespace EntityData
 		{
 			return mass;
 		}
-
 		p_dec SetMass()
 		{
 			return (mass = density * area);
 		}
 
-
+		void CalculateAABB()
+		{
+			
+		}
 	};
 
 	// Constraint

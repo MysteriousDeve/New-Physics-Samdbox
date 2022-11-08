@@ -18,10 +18,20 @@ public:
 	// Count the existing entities available in scene
 	int entityCount = 0, geometryCount = 0;
 
-	// Default constructor
-	Scene() {}
-
 	p_dec simUpdateDelta = 1 / 60.0;
+	p_dec simUpdateDeltaInternal = 1 / 60.0;
+
+	// Default constructor
+	Scene() 
+	{
+
+	}
+
+	Scene(p_dec simUpdateDelta)
+	{
+		this->simUpdateDelta = simUpdateDelta;
+		simUpdateDeltaInternal = simUpdateDelta;
+	}
 
 	void AddEntity(EntityType type)
 	{
@@ -29,7 +39,8 @@ public:
 		entityCount++;
 		return;
 	}
-	Entity *AddGeometry(GeometryType type)
+
+	Entity* AddGeometry(GeometryType type)
 	{
 		Entity e = Entity(EntityType::Geometry, entities.size(), { (int)geometries.size(), -1, -1 });
 		entities.push_back(e);
@@ -39,29 +50,25 @@ public:
 
 		return &entities[entityCount - 1];
 	}
+	EntityData::Geom* GetGeomFromEntity(Entity* entity)
+	{
+		return &geometries[entity->entityRef[0]];
+	}
 	
 	void InitializeSceneTesting(int nOfTestEntities)
 	{
 		for (int i = 0; i < nOfTestEntities; i++)
 		{
+			Entity* addedEntity = AddGeometry(GeometryType::Circle);
+			EntityData::Geom* addedGeom = GetGeomFromEntity(addedEntity);
+
 			float randRadius = (rand()) / float(RAND_MAX) / 10.0 + 0.025;
-
-			AddGeometry(GeometryType::Circle);
-
-			Geometry g(
-				Transform2D(
-					Vector2((rand()) / float(RAND_MAX) - 0.5f, (rand()) / float(RAND_MAX) - 0.5f) / 2.0,
-					Vector2(randRadius, randRadius),
-					0
-				),
-				EntityType::Circle
-			);
-			g.vel = Vector2(
+			addedGeom->props.circle.radius = randRadius;
+			addedGeom->vel = Vector2(
 				(rand()) / float(RAND_MAX) - 0.5f,
 				(rand()) / float(RAND_MAX) - 0.5f
 			) * 16;
-			g.restitution = 0.25;
-			geometries.push_back(g);
+			addedGeom->restitution = 0.25;
 		}
 	}
 
@@ -76,11 +83,11 @@ public:
 	}
 
 	// Apply gravity
-	void ApplyGravity(float dt)
+	void ApplyGravity()
 	{
 		for (auto& x : geometries)
 		{
-			x.vel += gravity * dt * (x.density != INFINITY) * x.gravityScale;
+			x.vel += gravity * simUpdateDelta * (x.density != INFINITY) * x.gravityScale;
 		}
 	}
 
@@ -133,7 +140,7 @@ public:
 				outputList.push_back(
 					CollisionInfo
 					(
-						t.a, t.b,
+						t,
 						VectorAB.Normalize(),
 						depth,
 						Vector2::Dot(a->vel, VectorAB) > 0 && Vector2::Dot(b->vel, -VectorAB) > 0
@@ -148,7 +155,7 @@ public:
 	{
 		for (int i = 0; i < geometries.size(); i++)
 		{
-			geometries[i].CalculateAABB();
+			geometries[i].;
 		}
 
 		return NarrowCollisionsTest(AABBCollisionsTest(geometries));
@@ -162,11 +169,11 @@ public:
 	{
 		for (auto &x : info)
 		{
-			Solve(info, simUpdateDelta);
+			Solve(x, simUpdateDelta);
 		}
 	}
 
-	void SolveOverlap(vector<CollisionInfo> collisionList, float dt)
+	void SolveOverlap(vector<CollisionInfo> collisionList)
 	{
 		for (auto& t : collisionList)
 		{
@@ -195,28 +202,13 @@ public:
 
 	void Update()
 	{
-		dt /= 3;
 		for (int i = 0; i < 3; i++)
 		{
 			ApplyGravity();
 			auto currentCollisionInfo = DetectCollision();
-			SolveCollision(currentCollisionInfo, dt);
-			SolveOverlap(currentCollisionInfo, dt);
+			SolveCollision(currentCollisionInfo);
+			SolveOverlap(currentCollisionInfo);
 		}
-
-		// Bounding obj in a 2x2 box
-		/*for (auto& t : geometries)
-		{
-			Vector2 pos = t.transform.position;
-			if (pos.y > 1)
-			{
-				t.transform.position.y -= 2;
-			}
-			else if (pos.y < -1)
-			{
-				t.transform.position.y += 2;
-			}
-		}*/
 	}
 
 	void RenderScene(int i, Shader* shader)

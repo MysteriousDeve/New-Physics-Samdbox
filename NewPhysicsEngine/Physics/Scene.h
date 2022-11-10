@@ -18,8 +18,8 @@ public:
 	// Count the existing entities available in scene
 	int entityCount = 0, geometryCount = 0;
 
-	p_dec simUpdateDelta = 1 / 60.0;
-	p_dec simUpdateDeltaInternal = 1 / 60.0;
+	p_dec simUpdateDelta = 1 / 60.0f;
+	p_dec simUpdateDeltaInternal = 1 / 60.0f;
 
 	// Default constructor
 	Scene() 
@@ -124,7 +124,7 @@ public:
 
 	vector<CollisionInfo> NarrowCollisionsTest(vector<CollisionTestInfo> testList)
 	{
-		int size = geometries.size();
+		p_dec size = geometries.size();
 		vector<CollisionInfo> outputList;
 
 		for (auto &t: testList)
@@ -140,7 +140,7 @@ public:
 				outputList.push_back(
 					CollisionInfo
 					(
-						t,
+						a, b,
 						VectorAB.Normalize(),
 						depth,
 						Vector2::Dot(a->vel, VectorAB) > 0 && Vector2::Dot(b->vel, -VectorAB) > 0
@@ -155,14 +155,13 @@ public:
 	{
 		for (int i = 0; i < geometries.size(); i++)
 		{
-			geometries[i].;
+			geometries[i].CalculateAABB();
 		}
 
 		return NarrowCollisionsTest(AABBCollisionsTest(geometries));
 		//NarrowCollisionsTest(
 		//	SpatialSubdivisionTest()
 		//);
-		
 	}
 
 	void SolveCollision(vector<CollisionWrapper> info)
@@ -227,7 +226,7 @@ vector<CollisionTestInfo> Scene::SpatialSubdivisionTest()
 	float cellSize = 0; float lx = INFINITY, ly = INFINITY, hx = -INFINITY, hy = -INFINITY;
 	for (auto& t : geometries)
 	{
-		float currentLargestSize = t.transform.scale.Max();
+		float currentLargestSize = std::max(t.aabb.w, t.aabb.h);
 		if (currentLargestSize > cellSize) cellSize = currentLargestSize;
 
 		Vector2 currentPos = t.transform.position;

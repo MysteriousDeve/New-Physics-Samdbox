@@ -23,7 +23,7 @@ enum EntityType
 struct Entity
 {
 	// 1. Geometries, 2. Non-geometries, 3. External Components
-	array<int, 3> entityRef;
+	std::array<int, 3> entityRef;
 	int id;
 
 	EntityType entityType = EntityType::Nothing;
@@ -40,7 +40,7 @@ struct Entity
 	EntityData::EntityProp props;
 	EntityData::Geom geom;
 
-	Entity(EntityType type, int id, array<int, 3> entityRef)
+	Entity(EntityType type, int id, std::array<int, 3> entityRef)
 	{
 		this->entityType = type;
 		this->isGeometry = (type >> 8) & 1;

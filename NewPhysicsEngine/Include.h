@@ -12,14 +12,24 @@
 #include <array>
 #include <algorithm>
 
-#ifdef PHYSICS_USE_HIGH_PRECISION
+#include <boost/multiprecision/cpp_bin_float.hpp>
+#include <boost/multiprecision/cpp_int.hpp>
+using namespace boost;
+using namespace boost::multiprecision;
+
+#ifdef PHYSICS_USE_HIGHER_PRECISION
+
+typedef cpp_bin_float<128> p_dec;
+typedef int128_t p_int;
+
+#elif defined PHYSICS_USE_HIGH_PRECISION
 
 typedef double p_dec;
 typedef long long p_int;
 
 #else
 
-typedef float32 p_dec;
-typedef int32 p_int;
+typedef float p_dec;
+typedef int p_int;
 
 #endif

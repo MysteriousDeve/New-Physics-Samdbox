@@ -122,10 +122,10 @@ public:
 		return cond;
 	}
 
-	vector<CollisionInfo> NarrowCollisionsTest(vector<CollisionTestInfo> testList)
+	vector<CollisionWrapper> NarrowCollisionsTest(vector<CollisionTestInfo> testList)
 	{
 		p_dec size = geometries.size();
-		vector<CollisionInfo> outputList;
+		vector<CollisionWrapper> outputList;
 
 		for (auto &t: testList)
 		{

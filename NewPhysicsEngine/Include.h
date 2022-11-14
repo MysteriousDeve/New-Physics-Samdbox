@@ -19,7 +19,7 @@ typedef long long p_int;
 
 #else
 
-typedef float p_dec;
-typedef int p_int;
+typedef float32 p_dec;
+typedef int32 p_int;
 
 #endif

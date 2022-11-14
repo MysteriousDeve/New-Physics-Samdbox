@@ -259,7 +259,7 @@ const SOLVE_RETURN Solve_CircleCircle(SOLVE_PARAM)
 }
 const SOLVE_RETURN Solve_CirclePlane(SOLVE_PARAM)
 {
-	
+	return;
 }
 
 /* Not implemented */ const SOLVE_RETURN Solve_BoxBox(SOLVE_PARAM)
@@ -314,6 +314,7 @@ const std::function<SOLVE_FUNC_DEF> GetSolveFunc(int i)
 {
 	return solveFuncList[i];
 }
+
 const SOLVE_RETURN Solve(CollisionWrapper col, p_dec dt)
 {
 	if (col)

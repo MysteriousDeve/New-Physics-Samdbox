@@ -47,19 +47,8 @@ struct Entity
 		this->entityRef = entityRef;
 		this->id = id;
 
-		SetArea();
+		geom.SetArea();
 		geom.SetMass();
-	}
-
-	float SetArea()
-	{
-		int id = entityType;
-		switch (id)
-		{
-		case 2:   return geom.area = geom.PolygonArea();
-		case 1:   return geom.area = geom.BoxArea();
-		default:  return geom.area = geom.CircleArea();
-		}
 	}
 
 	Entity() {}

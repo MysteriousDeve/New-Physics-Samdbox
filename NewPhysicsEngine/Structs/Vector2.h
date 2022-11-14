@@ -6,16 +6,16 @@ using namespace std;
 
 struct Vector2
 {
-	float x = 0, y = 0;
-	union { float xy[1]; } xx, yy;
+	p_dec x = 0, y = 0;
+	union { p_dec xy[1]; } xx, yy;
 
-	Vector2(float x, float y)
+	Vector2(p_dec x, p_dec y)
 	{
 		this->x = x;
 		this->y = y;
 	}
 
-	Vector2(float xy)
+	Vector2(p_dec xy)
 	{
 		this->x = xy;
 		this->y = xy;
@@ -42,12 +42,12 @@ struct Vector2
 		return Vector2(x - a.x, y - a.y);
 	}
 
-	Vector2 operator*(float multiplier)
+	Vector2 operator*(p_dec multiplier)
 	{
 		return Vector2(x * multiplier, y * multiplier);
 	}
 
-	Vector2 operator/(float multiplier)
+	Vector2 operator/(p_dec multiplier)
 	{
 		return Vector2(x / multiplier, y / multiplier);
 	}
@@ -62,12 +62,12 @@ struct Vector2
 		return Vector2(x -= a.x, y -= a.y);
 	}
 
-	Vector2 operator*=(float multiplier)
+	Vector2 operator*=(p_dec multiplier)
 	{
 		return Vector2(x *= multiplier, y *= multiplier);
 	}
 
-	Vector2 operator/=(float multiplier)
+	Vector2 operator/=(p_dec multiplier)
 	{
 		return Vector2(x /= multiplier, y /= multiplier);
 	}
@@ -98,23 +98,23 @@ struct Vector2
 
 	void Clear()
 	{
-		*this = Vector2();
+		x = y = 0;
 	}
 
 	// The length of the vector
-	float len()
+	p_dec len()
 	{
 		return sqrt(lenSq());
 	}
 
-	float lenSq()
+	p_dec lenSq()
 	{
 		return x * x + y * y;
 	}
 
 	Vector2 Normalize()
 	{
-		float l = len();
+		p_dec l = lenSq();
 		return( 
 			*this = (l != 0 ? 
 				*this / l : 
@@ -122,33 +122,49 @@ struct Vector2
 		);
 	}
 
+	Vector2 Normalized()
+	{
+		p_dec l = lenSq();
+		return
+			(
+				l != 0 ? 
+				*this / l :
+				Vector2(1, 0)
+			);
+	}
+
 	// The angle of the vector in radian
-	float GetAngle()
+	p_dec GetAngle()
+	{
+		return atan2(y, x);
+	}
+
+	p_dec GetAngleDeg()
 	{
 		return atan2(y, x);
 	}
 
 	// Max value of the elements in the vector
-	float Max()
+	p_dec Max()
 	{
 		return std::max(x, y);
 	}
 
 	// Min value of the elements in the vector
-	float Min()
+	p_dec Min()
 	{
 		return std::min(x, y);
 	}
 
 	// Rotate the vector by a specified angle in radian
-	Vector2 Rotate(float angle)
+	Vector2 Rotate(p_dec angle)
 	{
-		float c = cos(angle);
-		float s = sin(angle);
+		p_dec c = cos(angle);
+		p_dec s = sin(angle);
 		return (*this = Vector2(c * x - s * y, s * x + c * y));
 	}
 
-	float InternalMultiply()
+	p_dec InternalMultiply()
 	{
 		return x * y;
 	}
@@ -159,12 +175,12 @@ struct Vector2
 		return glm::vec2(x, y);
 	};
 	
-	static float Dot(Vector2 v1, Vector2 v2)
+	static p_dec Dot(Vector2 v1, Vector2 v2)
 	{
 		return v1.x * v2.x + v1.y * v2.y;
 	}
 
-	static Vector2 angleToNormal(float angle)
+	static Vector2 angleToNormal(p_dec angle)
 	{
 		return Vector2(cos(angle), sin(angle));
 	}

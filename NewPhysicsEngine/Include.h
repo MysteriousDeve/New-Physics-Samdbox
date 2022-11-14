@@ -12,5 +12,14 @@
 #include <array>
 #include <algorithm>
 
-typedef float dec;
-typedef int num;
+#ifdef PHYSICS_USE_HIGH_PRECISION
+
+typedef double p_dec;
+typedef long long p_int;
+
+#else
+
+typedef float p_dec;
+typedef int p_int;
+
+#endif

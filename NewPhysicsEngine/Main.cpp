@@ -5,6 +5,7 @@
 
 #include "Physics/Scene.h"
 #include "Physics/Entity.h"
+#include "Physics/Geometry.h"
 #include "Physics/Transform2D.h"
 
 #include "UI/InteractionHandler.h"

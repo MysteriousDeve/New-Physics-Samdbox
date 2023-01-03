@@ -18,8 +18,8 @@ public:
 	// Count the existing entities available in scene
 	int entityCount = 0, geometryCount = 0;
 
-	p_dec simUpdateDelta = 1 / 60.0f;
-	p_dec simUpdateDeltaInternal = 1 / 60.0f;
+	p_dec simUpdateDelta = 1 / 60.0;
+	p_dec simUpdateDeltaInternal = 1 / 60.0;
 
 	// Default constructor
 	Scene() 
@@ -59,154 +59,17 @@ public:
 	{
 		for (int i = 0; i < nOfTestEntities; i++)
 		{
-			Entity* addedEntity = AddGeometry(GeometryType::Circle);
-			EntityData::Geom* addedGeom = GetGeomFromEntity(addedEntity);
-
-			float randRadius = (rand()) / float(RAND_MAX) / 10.0 + 0.025;
-			addedGeom->props.circle.radius = randRadius;
-			addedGeom->vel = Vector2(
-				(rand()) / float(RAND_MAX) - 0.5f,
-				(rand()) / float(RAND_MAX) - 0.5f
-			) * 16;
-			addedGeom->restitution = 0.25;
-		}
-	}
-
-	EntityData::Geom* GetGeometryRef(int i)
-	{
-		return &geometries[i];
-	}
-
-	Entity* GetEntityRef(int i)
-	{
-		return &entities[i];
-	}
-
-	// Apply gravity
-	void ApplyGravity()
-	{
-		for (auto& x : geometries)
-		{
-			x.vel += gravity * simUpdateDelta * (x.density != INFINITY) * x.gravityScale;
-		}
-	}
-
-	// Collisions detection
-	vector<CollisionTestInfo> SpatialSubdivisionTest();
-	vector<CollisionTestInfo> AABBCollisionsTest(vector<EntityData::Geom> geometries)
-	{
-		int size = geometries.size();
-		vector<CollisionTestInfo> testList;
-		for (int i = 0; i < size; i++)
-		{
-			for (int j = i + 1; j < size; j++)
-			{
-				bool cond = AABBPairTestDebug(geometries[i], geometries[j]);
-				if (cond)
-				{
-					testList.push_back(CollisionTestInfo(geometries[i], geometries[j]));
-				}
-			}
-		}
-		return testList;
-	}
-
-	bool AABBPairTest(EntityData::Geom a, EntityData::Geom b)
-	{
-		return AABB::DetectCollisionTest(a.aabb, b.aabb);
-	}
-
-	bool AABBPairTestDebug(EntityData::Geom a, EntityData::Geom b)
-	{
-		bool cond = AABB::DetectCollisionTest(a.aabb, b.aabb);
-		return cond;
-	}
-
-	vector<CollisionWrapper> NarrowCollisionsTest(vector<CollisionTestInfo> testList)
-	{
-		p_dec size = geometries.size();
-		vector<CollisionWrapper> outputList;
-
-		for (auto &t: testList)
-		{
-			float depth = pow((t.a->transform.scale.x + t.b->transform.scale.x) / 2.0f, 2) - (a->transform.position - b->transform.position).lenSq();
-			if (depth > 0)
-			{
-				a->color = Color(0, 1, 1);
-				b->color = Color(0, 1, 1);
-
-				Vector2 VectorAB = b->transform.position - a->transform.position;
-
-				outputList.push_back(
-					CollisionInfo
-					(
-						a, b,
-						VectorAB.Normalize(),
-						depth,
-						Vector2::Dot(a->vel, VectorAB) > 0 && Vector2::Dot(b->vel, -VectorAB) > 0
-					)
-				);
-			}
-		}
-		return outputList;
-	}
-
-	vector<CollisionInfo> DetectCollision()
-	{
-		for (int i = 0; i < geometries.size(); i++)
-		{
-			geometries[i].CalculateAABB();
-		}
-
-		return NarrowCollisionsTest(AABBCollisionsTest(geometries));
-		//NarrowCollisionsTest(
-		//	SpatialSubdivisionTest()
-		//);
-	}
-
-	void SolveCollision(vector<CollisionWrapper> info)
-	{
-		for (auto &x : info)
-		{
-			Solve(x, simUpdateDelta);
-		}
-	}
-
-	void SolveOverlap(vector<CollisionInfo> collisionList)
-	{
-		for (auto& t : collisionList)
-		{
-			float densitySum = geometries[t.a].density + geometries[t.b].density;
-			Vector2 contactForce = t.normal * t.depth;
-
-			float massA = geometries[t.a].GetMass(), massB = geometries[t.b].GetMass();
-
-			Vector2 massSolveA = contactForce * massA / densitySum * 2,
-					massSolveB = contactForce * massB / densitySum * 2;
-
-			geometries[t.a].transform.position -= massSolveA;
-			geometries[t.b].transform.position += massSolveB;
-
-			geometries[t.a].vel -= massSolveA;
-			geometries[t.b].vel += massSolveB;
-		}
-	}
-	void PhysicsUpdate(float dt)
-	{
-		for (auto& t : geometries)
-		{
-			t.transform.position += t.vel * dt;
-		}
-	}
-
-	void Update()
-	{
-		for (int i = 0; i < 3; i++)
-		{
-			ApplyGravity();
-			auto currentCollisionInfo = DetectCollision();
-			SolveCollision(currentCollisionInfo);
-			SolveOverlap(currentCollisionInfo);
+			Entity e(
+				Transform2D(
+					Vector2(rand() / float(RAND_MAX) - 0.5, rand() / float(RAND_MAX) - 0.5),
+					0,
+					Vector2(0.1, 0.1),
+					0
+				),
+				EntityType::Circle
+			);
+			e.color = Color(0, 0.5, 1);
+			entities.push_back(e);
 		}
 	}
 
@@ -226,7 +89,7 @@ vector<CollisionTestInfo> Scene::SpatialSubdivisionTest()
 	float cellSize = 0; float lx = INFINITY, ly = INFINITY, hx = -INFINITY, hy = -INFINITY;
 	for (auto& t : geometries)
 	{
-		float currentLargestSize = std::max(t.aabb.w, t.aabb.h);
+		float currentLargestSize = t.transform.scale.Max();
 		if (currentLargestSize > cellSize) cellSize = currentLargestSize;
 
 		Vector2 currentPos = t.transform.position;

@@ -3,11 +3,6 @@
 #include "Renderer/Renderer.h"
 #include "Renderer/Camera.h"
 
-#include "Physics/Scene.h"
-#include "Physics/Entity.h"
-#include "Physics/Geometry.h"
-#include "Physics/Transform2D.h"
-
 #include "UI/InteractionHandler.h"
 #include "UI/EventCall.h"
 
@@ -29,6 +24,21 @@ Camera cam(Vector2(0.0f, 0.0f), 1, 0, w / float(h));
 
 int main()
 {
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     glfwSetErrorCallback(ErrorCallback);
     glfwInit();
 
@@ -49,10 +59,6 @@ int main()
 
 
     GLfloat vert[]{
-        /*-1.0f, -1.0f, 0.0f,
-        -1.0f,  1.0f, 0.0f,
-         1.0f,  1.0f, 0.0f,
-         1.0f, -1.0f, 0.0f,*/
          -0.5f, -0.5f, 0.0f,
          -0.5f,  0.5f, 0.0f,
           0.5f,  0.5f, 0.0f,
@@ -73,19 +79,6 @@ int main()
     InteractionHandler handler(win, &cam);
     handler.AddButton(Vector2(), Vector2(300, 300));
     eventHandler.push_back(&handler);
-
-    //Geometry e(
-    //    Transform2D(
-    //        Vector2(0, 0),
-    //        0,
-    //        Vector2(0.2, 0.2),
-    //        0
-    //    ),
-    //    EntityType::Circle
-    //);
-    //e.density = 1;
-    //scene.AddGeometry(e);
-    //Geometry* eref = scene.GetGeometryRef(scene.geometries.size() - 1);
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

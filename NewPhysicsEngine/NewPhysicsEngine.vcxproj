@@ -145,13 +145,7 @@
     <ClInclude Include="Misc\NewPhysicsEngine.h" />
     <ClInclude Include="Misc\Resource.h" />
     <ClInclude Include="Misc\targetver.h" />
-    <ClInclude Include="Physics\Entity.h" />
-    <ClInclude Include="Physics\AABB.h" />
-    <ClInclude Include="Physics\EntityDataStruct.h" />
-    <ClInclude Include="Physics\PhysicsSolverFunc.h" />
     <ClInclude Include="ProjectInclude.h" />
-    <ClInclude Include="Physics\Transform2D.h" />
-    <ClInclude Include="Physics\Scene.h" />
     <ClInclude Include="Renderer\Camera.h" />
     <ClInclude Include="Renderer\Mesh.h" />
     <ClInclude Include="Renderer\Renderer.h" />

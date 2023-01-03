@@ -12,6 +12,8 @@
 #include <array>
 #include <algorithm>
 
+#include <chipmunk/chipmunk.h>
+
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_int.hpp>
 using namespace boost;

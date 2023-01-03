@@ -39,12 +39,6 @@
     <ClInclude Include="Misc\targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Physics\Entity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Physics\Scene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Renderer\Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -60,12 +54,6 @@
     <ClInclude Include="Structs\Vector2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Physics\Transform2D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Physics\AABB.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Renderer\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -79,12 +67,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ProjectInclude.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Physics\EntityDataStruct.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Physics\PhysicsSolverFunc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UI\EventCall.h">

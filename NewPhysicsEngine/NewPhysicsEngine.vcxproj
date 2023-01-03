@@ -170,6 +170,7 @@
     <ResourceCompile Include="Misc\NewPhysicsEngine.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="about.md" />
     <None Include="Shaders\Circle.frag" />
     <None Include="Shaders\Common.vert" />
   </ItemGroup>

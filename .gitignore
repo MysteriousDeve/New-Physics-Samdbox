@@ -362,4 +362,5 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-boost_1_80_0.zip
+# Exclude all libraries
+Libraries/

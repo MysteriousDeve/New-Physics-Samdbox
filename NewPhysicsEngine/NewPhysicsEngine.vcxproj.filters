@@ -107,6 +107,7 @@
   <ItemGroup>
     <None Include="Shaders\Common.vert" />
     <None Include="Shaders\Circle.frag" />
+    <None Include="about.md" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Shaders\Box.frag" />

@@ -1,9 +1,24 @@
-## Structure
+# Structure
 
---Loop
+## MainLoop
+-- Loop
 
--PhysicsLoop
--RenderLoop
--OtherTaskLoop
+- PhysicsLoop
+- RenderLoop
+- OtherTaskLoop
 
---EndLoop
+-- EndLoop
+
+
+
+## PhysicsLoop
+
+-- 
+
+
+
+# RenderLoop
+
+
+#OtherTaskLoop
+
